@@ -1,21 +1,12 @@
-<?php
-$servername = "localhost"; // replace with your database host
-$username = "root"; // replace with your database username
-$password = ""; // replace with your database password
-$dbname = "bit210"; // replace with your database name
+<?php 
 
-// Create a connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+  $con = mysqli_connect("localhost", "root", "", "bit210");
 
-// Check the connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} else {
-    echo "Connected successfully";
-}
+  if(mysqli_connect_errno()){
+    die("Cannot Connect to the database".mysqli_connect_error());
+  }
 
-// Rest of your code...
+  define("UPLOAD_SRC",$_SERVER['DOCUMENT_ROOT']."/GitHub/WebProB21000180/uploads/");
 
-// Close the connection
-$conn->close();
+  define("FETCH_SRC","http://127.0.0.1/GitHub/EcoTrace/uploads/");
 ?>

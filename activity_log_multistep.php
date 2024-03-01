@@ -1,9 +1,5 @@
 <?php
 require("connection.php");
-include("carbon_calc.php");
-
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
 
 // Check if the 'success' parameter is set in the URL
 if (isset($_GET['success'])) {
@@ -19,6 +15,9 @@ if (isset($_GET['success'])) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="images/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-KFMC6XQRgC7h2uEe29jvSjtH8/XVcBMFG/xYOCSjok9/ZF6lqU8rA9jaqHMw8elRSRcAkuVHwtR9Dqd1yCUSSA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-yshd5LFC3hG/jYSpn6Sy2J/6t6rNfkJN4p1WQv3o7eE1LII1ay4Vh5c5u94w9AsN" crossorigin="anonymous"></script>
     <title>Activity Tracking</title>
     <!-- CSS FILES START -->
     <link href="css/custom3.css" rel="stylesheet">
@@ -29,6 +28,38 @@ if (isset($_GET['success'])) {
     <link href="css/prettyPhoto.css" rel="stylesheet">
     <link href="css/all.min.css" rel="stylesheet">
     <!-- CSS FILES End -->
+
+<style>
+
+#container {
+  max-width: 600px; 
+}
+.step-container {
+      position: relative;
+      text-align: center;
+      transform: translateY(-43%);
+    }
+
+    .step-circle {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 2px solid #66bb6a;
+      line-height: 30px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      cursor: pointer; /* Added cursor pointer */
+    }
+
+    
+    #activity-log-form{
+		overflow-x: hidden;
+	}
+    </style>
 </head>
 <body>
   <div class="wrapper">
@@ -77,15 +108,23 @@ if (isset($_GET['success'])) {
         <div class="container">
             <h1>Activity Tracking </h1>
         </div>
-        </section>
+    </section>
     <!--Inner Header End--> 
 
     <!-- Activity Log Form Start -->
-      <div class="container">
-         <div class="row justify-content-center">
-            <div class="col-md-7">
-               <form id="activity-log-form" action="carbon_calc.php" method="post" enctype="multipart/form-data">
-                  <h2 class="text-center" style="margin: 3rem; padding-bottom: 1rem; ">Log this week's activity.</h2>
+    <div id="container" class="container mt-5">
+        <div class="progress px-1" style="height: 5px;">
+            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="step-container d-flex justify-content-between">
+            <div class="step-circle" onclick="displayStep(1)">1</div>
+            <div class="step-circle" onclick="displayStep(2)">2</div>
+            <div class="step-circle" onclick="displayStep(3)">3</div>
+        </div>
+
+               <form id="activity-log-form">
+               <div class="step step-1">
+                <h4>Transportation</h4>
                   <!-- TRANSPORTATION METHOD -->
 
                      <div id="car_owner_questions" class="form-group">
@@ -107,6 +146,14 @@ if (isset($_GET['success'])) {
                         <label>How many days did you walk or cycle as your primary mode of transportation this week?</label>
                         <input type="number" name="active_commuter_days" min="0" step="1" class="form-control">
                      </div>
+
+                     <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                     </div>
+                </div>
+
+                <div class="step step-2">
+                <h4>Meals of the week</h4>
 
                      <!-- DIETARY PREFERENCES -->
 
@@ -134,6 +181,16 @@ if (isset($_GET['success'])) {
                         <input type="text" name="mixed_diet_meals" class="form-control">
                      </div>
 
+                     <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary prev-step">Previous</button>
+                        <button type="button" class="btn btn-primary next-step">Next</button>
+                     </div>
+                </div>
+
+                <div class="step step-3">
+                <!-- Step 3 form fields here -->
+                <h4>Energy Consumption</h4>
+
                      <!-- ENERGY CONSUMPTION -->
 
                      <div id="heating_cooling_questions" class="form-group">
@@ -155,9 +212,13 @@ if (isset($_GET['success'])) {
                      </div>
 
                      <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-primary prev-step">Previous</button>
                         <button type="submit" class="btn btn-primary">Submit</button>
                      </div>
+                </div>
                   </form>
+
+                </div>
 
 
                   <!-- JAVASCRIPT -->
@@ -199,6 +260,59 @@ if (isset($_GET['success'])) {
                      // Call the function initially to set the initial state of the form
                      showHideQuestions();
                   </script> 
+                  <script>
+                                    
+                    var currentStep = 1;
+
+                    function displayStep(stepNumber) {
+                        if (stepNumber >= 1 && stepNumber <= 3) {
+                            $(".step-" + currentStep).hide();
+                            $(".step-" + stepNumber).show();
+                            currentStep = stepNumber;
+                            updateProgressBar();
+                        }
+                    }
+
+                    function updateProgressBar() {
+                        var progressPercentage = ((currentStep - 1) / 2) * 100;
+                        $(".progress-bar").css("width", progressPercentage + "%");
+                        $(".progress-bar").css("background-color", "#66bb6a");
+                    }
+
+                    $(document).ready(function () {
+                        $('#activity-log-form').find('.step').slice(1).hide();
+
+                        $(".next-step").click(function () {
+                            if (currentStep < 3) {
+                                $(".step-" + currentStep).addClass("animate__fadeOutLeft");
+                                currentStep++;
+                                setTimeout(function () {
+                                    $(".step").removeClass("animate__animated animate__fadeOutLeft").hide();
+                                    $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInRight");
+                                    updateProgressBar();
+                                }, 500);
+                            }
+                        });
+
+                        $(".prev-step").click(function () {
+                            if (currentStep > 1) {
+                                $(".step-" + currentStep).addClass("animate__fadeOutRight");
+                                currentStep--;
+                                setTimeout(function () {
+                                    $(".step").removeClass("animate__animated animate__fadeOutRight").hide();
+                                    $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInLeft");
+                                    updateProgressBar();
+                                }, 500);
+                            }
+                        });
+
+                        updateProgressBar();
+                    });
+
+                      
+                    </script>
+
+                  
             </div>
          </div>
       </div>
