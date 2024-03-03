@@ -10,3 +10,4 @@
 
   define("FETCH_SRC","http://127.0.0.1/GitHub/EcoTrace/uploads/");
 ?>
+
