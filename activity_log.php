@@ -1,5 +1,4 @@
 <?php
-require("connection.php");
 include("carbon_calc.php");
 
 error_reporting(E_ALL);
@@ -19,16 +18,105 @@ if (isset($_GET['success'])) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="images/favicon.png">
-    <title>Activity Tracking</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <title>Weekly Activity Log</title>
     <!-- CSS FILES START -->
     <link href="css/custom3.css" rel="stylesheet">
     <link href="css/color.css" rel="stylesheet">
     <link href="css/responsive.css" rel="stylesheet">
     <link href="css/owl.carousel.min.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/prettyPhoto.css" rel="stylesheet">
     <link href="css/all.min.css" rel="stylesheet">
     <!-- CSS FILES End -->
+
+<style>
+
+#container {
+  max-width: 700px; 
+}
+.step-container {
+      position: relative;
+      text-align: center;
+      transform: translateY(-43%);
+}
+
+    .step-circle {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: #fff;
+      border: 2px solid #66bb6a;
+      line-height: 30px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      cursor: pointer; 
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    h4{
+        color: #66bb6a !important; 
+        font-family: 'Poppins', sans-serif !important;
+        text-align:center;
+        margin-bottom:5%;
+    }
+
+    #activity-log-form{
+		overflow-x: hidden;
+	}
+
+    #bikeGif{
+        width:180px;
+        height:180px;
+        z-index: index 2;
+    }
+    
+    #bikeGif {
+    position: relative;
+    animation: cycleAnimation 6s linear infinite; 
+    z-index: 1;
+}
+
+
+@keyframes cycleAnimation {
+    0% {
+        left: -50px; /* Initial position outside the container on the left */
+        bottom: -35px; /* Initial position below the container */
+        transform: translateY(0);
+    }
+    10% {
+        left: 10%; /* Initial position outside the container on the left */
+        bottom: -6px; /* Initial position below the container */
+        transform: translateY(10px);
+    }
+    25% {
+        left: 25%; /* Move to the right, slightly down */
+        bottom: -6px; /* Initial position below the container */
+        transform: translateY(10px);
+    }
+    50% {
+        left: 50%; /* Move further right, slightly up */
+        bottom: -6px; /* Initial position below the container */
+        transform: translateY(90px);
+    }
+    75% {
+        left: 75%; /* Move to the right, slightly down again */
+        bottom: -6px; /* Initial position below the container */
+        transform: translateY(90px);
+    }
+    100% {
+        left: calc(100% + 50px); /* Move to the right, beyond the container */
+        bottom: -7px; /* Initial position below the container */
+        transform: translateY(0);
+    }
+}
+
+
+    </style>
 </head>
 <body>
   <div class="wrapper">
@@ -75,17 +163,25 @@ if (isset($_GET['success'])) {
     <!--Inner Header Start-->
     <section class="wf100 inner-header">
         <div class="container">
-            <h1>Activity Tracking </h1>
+            <h1>Weekly Activity Log</h1>
         </div>
-        </section>
+    </section>
     <!--Inner Header End--> 
 
     <!-- Activity Log Form Start -->
-      <div class="container">
-         <div class="row justify-content-center">
-            <div class="col-md-7">
-               <form id="activity-log-form" action="carbon_calc.php" method="post" enctype="multipart/form-data">
-                  <h2 class="text-center" style="margin: 3rem; padding-bottom: 1rem; ">Log this week's activity.</h2>
+    <div id="container" class="container mt-5">
+        <div class="progress px-1" style="height: 5px;">
+            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div class="step-container d-flex justify-content-between">
+            <div class="step-circle" onclick="displayStep(1)">1</div>
+            <div class="step-circle" onclick="displayStep(2)">2</div>
+            <div class="step-circle" onclick="displayStep(3)">3</div>
+        </div>
+
+            <form id="activity-log-form" action="carbon_calc.php" method="post" enctype="multipart/form-data">
+               <div class="step step-1">
+                <h4>Transportation</h4>
                   <!-- TRANSPORTATION METHOD -->
 
                      <div id="car_owner_questions" class="form-group">
@@ -107,6 +203,14 @@ if (isset($_GET['success'])) {
                         <label>How many days did you walk or cycle as your primary mode of transportation this week?</label>
                         <input type="number" name="active_commuter_days" min="0" step="1" class="form-control">
                      </div>
+
+                     <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-success next-step">Next</button>
+                     </div>
+                </div>
+
+                <div class="step step-2">
+                <h4>Meals of the week</h4>
 
                      <!-- DIETARY PREFERENCES -->
 
@@ -134,6 +238,16 @@ if (isset($_GET['success'])) {
                         <input type="text" name="mixed_diet_meals" class="form-control">
                      </div>
 
+                     <div class="col-md-12 text-center">
+                        <button type="button" class="btn btn-success prev-step">Previous</button>
+                        <button type="button" class="btn btn-success next-step">Next</button>
+                     </div>
+                </div>
+
+                <div class="step step-3">
+                <!-- Step 3 form fields here -->
+                <h4>Energy Consumption</h4>
+
                      <!-- ENERGY CONSUMPTION -->
 
                      <div id="heating_cooling_questions" class="form-group">
@@ -155,9 +269,13 @@ if (isset($_GET['success'])) {
                      </div>
 
                      <div class="col-md-12 text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-success prev-step">Previous</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
                      </div>
-                  </form>
+                </div>
+        </form>
+
+                </div>
 
 
                   <!-- JAVASCRIPT -->
@@ -199,9 +317,61 @@ if (isset($_GET['success'])) {
                      // Call the function initially to set the initial state of the form
                      showHideQuestions();
                   </script> 
-            </div>
-         </div>
-      </div>
+                  <script>
+                                    
+                    var currentStep = 1;
+
+                    function displayStep(stepNumber) {
+                        if (stepNumber >= 1 && stepNumber <= 3) {
+                            $(".step-" + currentStep).hide();
+                            $(".step-" + stepNumber).show();
+                            currentStep = stepNumber;
+                            updateProgressBar();
+                        }
+                    }
+
+                    function updateProgressBar() {
+                        var progressPercentage = ((currentStep - 1) / 2) * 100;
+                        $(".progress-bar").css("width", progressPercentage + "%");
+                        $(".progress-bar").css("background-color", "#66bb6a");
+                    }
+
+                    $(document).ready(function () {
+                        $('#activity-log-form').find('.step').slice(1).hide();
+
+                        $(".next-step").click(function () {
+                            console.log("Next button clicked");
+                            if (currentStep < 3) {
+                                $(".step-" + currentStep).addClass("animate__fadeOutLeft");
+                                currentStep++;
+                                setTimeout(function () {
+                                    $(".step").removeClass("animate__animated animate__fadeOutLeft").hide();
+                                    $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInRight");
+                                    updateProgressBar();
+                                }, 500);
+                            }
+                        });
+
+                        $(".prev-step").click(function () {
+                            console.log("previous button clicked");
+                            if (currentStep > 1) {
+                                $(".step-" + currentStep).addClass("animate__fadeOutRight");
+                                currentStep--;
+                                setTimeout(function () {
+                                    $(".step").removeClass("animate__animated animate__fadeOutRight").hide();
+                                    $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInLeft");
+                                    updateProgressBar();
+                                }, 500);
+                            }
+                        });
+
+                        updateProgressBar();
+                    });
+
+                      
+                    </script>
+                    <img src="images/lets-go-outside-saying-hello.gif" alt="Bike Ride Gif" id="bikeGif">
+
       <!-- Activity Log Form End -->
 
       <!-- Footer section -->
@@ -279,13 +449,11 @@ if (isset($_GET['success'])) {
         </div>
   </div>
   <!--   JS Files Start  --> 
-  <script src="js/jquery-3.3.1.min.js"></script> 
   <script src="js/jquery-migrate-1.4.1.min.js"></script> 
   <script src="js/popper.min.js"></script> 
   <script src="js/bootstrap.min.js"></script> 
   <script src="js/owl.carousel.min.js"></script> 
-  <script src="js/jquery.prettyPhoto.js"></script> 
   <script src="js/isotope.min.js"></script> 
-  <script src="js/custom.js"></script>
+  <script src="js/main.js"></script>
 </body>
 </html>

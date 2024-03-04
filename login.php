@@ -1,7 +1,7 @@
 <?php
 session_start(); // Start the session
 
-require("connection.php");
+include("accounts.php");
 
 // Check if the success message is set in the session
 if (isset($_SESSION['success_message'])) {
@@ -87,7 +87,7 @@ if (isset($_SESSION['success_message'])) {
                  <div class="col-lg-8">
                     <div class="myaccount-form">
                        <h3>Create Account</h3>
-                       <form method="post" action="userdb.php">
+                       <form method="post" action="accounts.php">
                            <ul class="row">
                               <li class="col-md-6">
                                     <div class="input-group">
@@ -121,7 +121,7 @@ if (isset($_SESSION['success_message'])) {
                                     </div>
                               </li>
                               <li class="col-md-12">
-                                    <button type="submit" class="register">Create Account</button>
+                                    <button type="submit" class="register" name="signup-btn">Create Account</button>
                               </li>
                            </ul>
                         </form>
@@ -131,12 +131,12 @@ if (isset($_SESSION['success_message'])) {
                  <div class="col-lg-4">
                     <div class="login-box">
                        <h3>Login Account</h3>
-                       <form>
+                       <form method="post" action="accounts.php">
                           <div class="input-group">
-                             <input type="text" class="form-control" placeholder="Username/Email" required>
+                             <input type="text" class="form-control"  name="username"placeholder="Username/Email" required>
                           </div>
                           <div class="input-group">
-                             <input type="password" class="form-control" placeholder="Password" required>
+                             <input type="password" class="form-control"  name="password" placeholder="Password" required>
                           </div>
                           <div class="input-group form-check">
                              <input type="checkbox" class="form-check-input" id="exampleCheck2">
@@ -144,7 +144,7 @@ if (isset($_SESSION['success_message'])) {
                              <a href="#" class="fp">Forgot Password</a> 
                           </div>
                           <div class="input-group">
-                             <button class="login-btn">Login</button>
+                             <button class="login-btn" name="login-btn">Login</button>
                           </div>
                        </form>
                     </div>
@@ -262,7 +262,7 @@ if (isset($_SESSION['success_message'])) {
     <script src="js/owl.carousel.min.js"></script> 
     <script src="js/jquery.prettyPhoto.js"></script> 
     <script src="js/isotope.min.js"></script> 
-    <script src="js/custom.js"></script>
+    <script src="js/main.js"></script>
 
     <!-- Add this script at the end of your HTML body -->
     <script>

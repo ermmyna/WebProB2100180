@@ -1,15 +1,61 @@
 <?php
+session_start();
 require("connection.php");
 
 // Check if the 'success' parameter is set in the URL
 if (isset($_GET['success'])) {
-  $success_message = $_GET['success'];
+   $success_message = $_GET['success'];
 }
 
-// Check if it's the user's first login
-if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
-   echo '<script>openFirstLoginForm();</script>';
+echo '<script>openFirstLoginForm();</script>';
+
+/*
+if(isset($_SESSION['userID'])) {
+
+   // Check if it's the user's first login
+   if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
+      echo '<script>openFirstLoginForm();</script>';
+   } else {
+      // User is logged in, retrieve user ID or other session data
+      $userID = $_SESSION['userID'];
+   }
+   
+   // Retrieve other user data as needed
+} else {
+   // Redirect to login page or handle unauthorized access
+   // header("Location: login.php");
+   // exit();
 }
+*/
+
+// Retrieve user data from the database
+$_SESSION['userID'] = 5;
+
+$userID = $_SESSION['userID'];
+$sql = "SELECT * FROM user WHERE id = :userID"; // Replace 'users' with your actual table name
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
+$stmt->execute();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Check if user data was found
+if (!$user) {
+   // Handle error if user data is not found
+   echo "User data not found!";
+   exit();
+}
+
+// Extract user data
+$username = $user['username'];
+$firstName = $user['firstName'];
+$lastName = $user['lastName'];
+$email = $user['email'];
+$contactNumber = $user['contactNumber'];
+$commutingMethod = $user['commutingMethod'];
+$dietaryPreferences = $user['dietaryPreferences'];
+$energySource = $user['energySource'];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +73,6 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
   <link href="css/responsive.css" rel="stylesheet">
   <link href="css/owl.carousel.min.css" rel="stylesheet">
   <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/prettyPhoto.css" rel="stylesheet">
   <link href="css/all.min.css" rel="stylesheet">
   <link href="css/slick.css" rel="stylesheet">
   <!-- CSS FILES End -->
@@ -174,7 +219,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Username</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           zoyak
+                           <?php echo $username; ?>
                         </div>
                         </div>
                         <hr>
@@ -183,7 +228,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">First Name</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           Zoya
+                           <?php echo $firstName; ?>
                         </div>
                         </div>
                         <hr>
@@ -192,7 +237,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Last Name</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           Khan
+                           <?php echo $lastName; ?>
                         </div>
                         </div>
                         <hr>
@@ -201,7 +246,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           fip@jukmuh.al
+                           <?php echo $email; ?>
                         </div>
                         </div>
                         <hr>
@@ -210,7 +255,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Contact Number</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           (239) 816-9029
+                           <?php echo $contactNumber; ?>
                         </div>
                         </div>
                         <hr>
@@ -219,7 +264,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Commuting Method</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           Car
+                           <?php echo $commutingMethod; ?>
                         </div>
                         </div>
                         <hr>
@@ -228,7 +273,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Dietary Preferences</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           Vegetarian
+                           <?php echo $dietaryPreferences; ?>
                         </div>
                         </div>
                         <hr>
@@ -237,7 +282,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
                            <h6 class="mb-0">Energy Source</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           Electicity (Grid)
+                           <?php echo $energySource; ?>
                         </div>
                         </div>
                         <hr>
@@ -379,6 +424,39 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
       </div>
    </div>
 
+   <script>
+      // Function to open the first-login form modal
+      function openFirstLoginForm() {
+         console.log("Opening first-login-modal...");
+         var firstLoginModal = document.getElementById("first-login-modal");
+         console.log(firstLoginModal); // Check if the modal element is found
+         if (firstLoginModal) {
+            firstLoginModal.style.display = "block";
+         } else {
+            console.error("Could not find first-login-modal element.");
+         }
+      }
+
+      // Get the modal
+      var firstLoginModal = document.getElementById("first-login-modal");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function() {
+         firstLoginModal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+         if (event.target == firstLoginModal) {
+            firstLoginModal.style.display = "none";
+         }
+      }
+   </script>
+
+
    <!-- EDIT PROFILE -->
    <!-- Modal -->
    <div id="editProfileModal" class="modal">
@@ -398,35 +476,6 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
    </div>
    
    <script>
-      // Function to open the first-login form modal
-      function openFirstLoginForm() {
-         var firstLoginModal = document.getElementById("first-login-modal");
-         firstLoginModal.style.display = "block";
-      }
-
-      // Get the modal
-      var firstLoginModal = document.getElementById("first-login-modal");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks on the button, open the modal
-      function openModal() {
-         firstLoginModal.style.display = "block";
-      }
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function() {
-         firstLoginModal.style.display = "none";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-      if (event.target == modal) {
-         firstLoginModal.style.display = "none";
-      }
-      }
-
       // Get the Edit Profile modal
       var editProfileModal = document.getElementById("editProfileModal");
 
@@ -461,7 +510,7 @@ if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
   <script src="js/owl.carousel.min.js"></script> 
   <script src="js/jquery.prettyPhoto.js"></script> 
   <script src="js/isotope.min.js"></script> 
-  <script src="js/custom.js"></script>
+  <script src="js/main.js"></script>
   <script src="js/profile.js"></script>
 </body>
 </html>
