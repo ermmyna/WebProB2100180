@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 //Email Sending Requirment 
-require 'vendor/autoload.php'; // Include the Composer-generated autoloader
+//require 'vendor/autoload.php'; // Include the Composer-generated autoloader
         
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -67,7 +67,7 @@ if (isset($_POST['signup-btn'])) {
     $hashed_password = password_hash($default_password, PASSWORD_DEFAULT);
 
     // Prepare SQL statement to insert user data into the database
-    $sql = "INSERT INTO user (username, password, first_login, email, contactNumber, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO user (username, password, first_login, email, contactNumber, firstName, lastName) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_prepare($con, $sql);
 
     // Bind parameters and execute the statement

@@ -92,7 +92,7 @@ ini_set('display_errors', 1);
                    </ul>
 
                    <li class="nav-item" style="list-style: none;">
-                     <a class="login-btn" href="login-page" role="button"> Login </a>
+                     <a class="login-btn" href="login.php" role="button"> Login </a>
                  </li>
                </div>
          
