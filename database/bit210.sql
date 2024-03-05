@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 08:18 AM
+-- Generation Time: Mar 05, 2024 at 10:37 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `ecotrace`
+-- Database: `bit210`
 --
 
 -- --------------------------------------------------------
@@ -37,21 +37,6 @@ CREATE TABLE `admin` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dailylog`
---
-
-CREATE TABLE `dailylog` (
-  `LogID` int(11) NOT NULL,
-  `userID` int(11) NOT NULL,
-  `Date` date NOT NULL,
-  `Transportation` varchar(255) NOT NULL,
-  `energyUsage` varchar(255) NOT NULL,
-  `meals` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `educontent`
 --
 
@@ -60,7 +45,7 @@ CREATE TABLE `educontent` (
   `typeOfContent` varchar(50) NOT NULL,
   `categoryOfContent` varchar(50) NOT NULL,
   `title` varchar(255) NOT NULL,
-  `description` varchar(1200) NOT NULL,
+  `description` varchar(3000) NOT NULL,
   `content` varchar(300) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -73,39 +58,46 @@ CREATE TABLE `educontent` (
 CREATE TABLE `user` (
   `userID` int(11) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `first_login` int(11) NOT NULL,
+  `profilePicture` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `contactNumber` varchar(15) DEFAULT NULL,
   `firstName` varchar(255) NOT NULL,
   `lastName` varchar(255) NOT NULL,
-  `commutingMethod` varchar(255) NOT NULL,
-  `energySource` varchar(255) NOT NULL,
-  `dietPreferences` varchar(255) NOT NULL
+  `commutingMethod` varchar(255) DEFAULT NULL,
+  `energySource` varchar(255) DEFAULT NULL,
+  `dietPreferences` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`userID`, `username`, `password`, `email`, `contactNumber`, `firstName`, `lastName`, `commutingMethod`, `energySource`, `dietPreferences`) VALUES
-(5, 'zoyak', '$2y$10$5nipLUb/BIo2w/qx/imOWeDKcGga39PC4Qql/uFhKKsz8AyIcTUbS', 'zoya@gmail.com', '12345', 'Zoya', 'Khan', '', '', '');
+INSERT INTO `user` (`userID`, `username`, `password`, `first_login`, `profilePicture`, `email`, `contactNumber`, `firstName`, `lastName`, `commutingMethod`, `energySource`, `dietPreferences`) VALUES
+(12, 'ermmyna', '$2y$10$/zMlXAXavKAtsO69PfXGmeoVy2ODH.2lWSPFKLsVKTnqqeXRiYwWe', 0, '', 'ermmyna@gmail.com', '0192644588', 'Ermmyna', 'Roselee Shah', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `weeklylog`
+--
+
+CREATE TABLE `weeklylog` (
+  `LogID` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `date` datetime NOT NULL,
+  `weekNo` int(11) NOT NULL,
+  `month` varchar(20) NOT NULL,
+  `carbonFootprintTransport` float NOT NULL,
+  `carbonFootprintFood` float NOT NULL,
+  `carbonFootprintEnergy` float NOT NULL,
+  `totalCarbonFootprint` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `admin`
---
-ALTER TABLE `admin`
-  ADD PRIMARY KEY (`adminID`);
-
---
--- Indexes for table `dailylog`
---
-ALTER TABLE `dailylog`
-  ADD PRIMARY KEY (`LogID`),
-  ADD KEY `user_fk` (`userID`);
 
 --
 -- Indexes for table `educontent`
@@ -120,42 +112,33 @@ ALTER TABLE `user`
   ADD PRIMARY KEY (`userID`);
 
 --
+-- Indexes for table `weeklylog`
+--
+ALTER TABLE `weeklylog`
+  ADD PRIMARY KEY (`LogID`),
+  ADD KEY `user_fk` (`userID`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `admin`
---
-ALTER TABLE `admin`
-  MODIFY `adminID` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `dailylog`
---
-ALTER TABLE `dailylog`
-  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `educontent`
 --
 ALTER TABLE `educontent`
-  MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `contentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT for table `weeklylog`
 --
-
---
--- Constraints for table `dailylog`
---
-ALTER TABLE `dailylog`
-  ADD CONSTRAINT `user_fk` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`);
+ALTER TABLE `weeklylog`
+  MODIFY `LogID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
