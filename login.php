@@ -1,5 +1,4 @@
 <?php
-session_start(); // Start the session
 
 include("accounts.php");
 
@@ -65,7 +64,7 @@ if (isset($_SESSION['success_message'])) {
                    </ul>
 
                    <li class="nav-item" style="list-style: none;">
-                     <a class="login-btn" href="login-page" role="button"> Login </a>
+                     <a class="login-btn" href="login.php" role="button"> Login </a>
                  </li>
                </div>
          
@@ -133,7 +132,7 @@ if (isset($_SESSION['success_message'])) {
                        <h3>Login Account</h3>
                        <form method="post" action="accounts.php">
                           <div class="input-group">
-                             <input type="text" class="form-control"  name="username"placeholder="Username/Email" required>
+                             <input type="text" class="form-control"  name="username"placeholder="Username" required>
                           </div>
                           <div class="input-group">
                              <input type="password" class="form-control"  name="password" placeholder="Password" required>
@@ -264,7 +263,6 @@ if (isset($_SESSION['success_message'])) {
     <script src="js/isotope.min.js"></script> 
     <script src="js/main.js"></script>
 
-    <!-- Add this script at the end of your HTML body -->
     <script>
         // Check if the success message session variable is set
         <?php if (isset($_SESSION['success_message'])): ?>

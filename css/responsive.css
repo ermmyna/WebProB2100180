@@ -655,6 +655,15 @@ section.page404.wf100.p80 img {
 	width: 50%; 
 	margin: 10px; 
 }
+
+.profile-dropdown {
+    padding:5px;
+    list-style: none;
+	margin-right:10px;
+    
+}
+
+
 /************  Home 2  ************/
 
 .services-area {

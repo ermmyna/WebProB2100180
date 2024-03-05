@@ -1,6 +1,10 @@
 <?php 
+include("accounts.php");
+
+
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
  ?>
 
 <html>
@@ -17,11 +21,19 @@ ini_set('display_errors', 1);
       <link href='https://fonts.googleapis.com/css?family=Anton&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
       <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha384-oS3vJDOi7W1ZLfIR3hjOMaL8NZ2Imw8qCD9T/ME5SXNtE1QhSUpc6auRvRSaG8lN" crossorigin="anonymous">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-      
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"/>
 
+   
       <!-- CSS FILES START -->
       <link href="css/custom3.css" rel="stylesheet">
+      <link href="css/login.css" rel="stylesheet">
       <link href="css/color.css" rel="stylesheet">
       <link href="css/responsive.css" rel="stylesheet">
       <link href="css/owl.carousel.min.css" rel="stylesheet">
@@ -56,7 +68,6 @@ ini_set('display_errors', 1);
             font-style: normal;
         }
    </style>
-
       
    </head>
    <body>
@@ -64,37 +75,63 @@ ini_set('display_errors', 1);
          <!--Header Start-->
          <header class="header-style-2">
             <nav class="navbar navbar-expand-lg">
-               <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px"></a>
+               <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                    <ul class="navbar-nav mr-auto">
                        <li class="nav-item">
-                           <a class="nav-link" href="index-2.html">Home</a>
+                           <a class="nav-link active" href="index.php">Home</a>
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="about.html">About</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="events-grid.html">Events</a>
+                           <a class="nav-link" href="activity_log.php">Activity Log</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="causes.html">Causes</a>
+                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="blog.html">Blogs</a>
+                           <a class="nav-link" href="display4.php">Learn</a>
                        </li>
+                       <!--
                        <li class="nav-item">
                            <a class="nav-link" href="#">Pages</a>
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="contact.html">Contact</a>
                        </li>
+                       --->
                    </ul>
+                   <?php if (isLoggedIn()): ?>
+                     <!-- If user is logged in, show profile circle -->
+                     <li class="nav-item profile-dropdown">
+                        <img src="images/profile.jpg" class="profile" />
+                        <ul class="profile-menu">
+                           <li class="sub-item">
+                               <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Update Profile</p>
+                               </a>
+                           </li>
+                           <!-- Other profile-related items -->
+                           <li class="sub-item">
+                                 <a href="index.php?logout=true" style="display: flex; align-items: center; text-decoration: none;"> <!-- Log out link -->
+                                    <span class="material-icons-outlined"> logout </span>
+                                    <p>Logout</p>
+                                 </a>
+                           </li>
+                        </ul>
+                     </li>
 
-                   <li class="nav-item" style="list-style: none;">
-                     <a class="login-btn" href="login.php" role="button"> Login </a>
-                 </li>
-               </div>
+               <?php else: ?>
+                     <!-- If user is not logged in, show login button -->
+                     <li class="nav-item" style="list-style: none;">
+                        <a class="login-btn" href="login.php" role="button"> Login </a>
+                     </li>
+               <?php endif; ?>
+               
+            </div>
          
             </nav>
             
@@ -104,6 +141,53 @@ ini_set('display_errors', 1);
          <div id="index_hype_container" style="margin:auto;position:relative;overflow:hidden;">
             <script type="text/javascript" charset="utf-8" src="index.hyperesources/index_hype_generated_script.js?71159"> </script>
         </div>
+
+
+        <!--First Time New Password Modal-->
+         <div class="modal fade" id="newPass" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="false">
+         <div class="modal-dialog">
+            <form action="accounts.php" method="POST" enctype="multipart/form-data">
+                  <div class="modal-content">
+                     <div class="modal-header">
+                        <h5 class="modal-title">Set New Password</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                     </div>
+                     <div class="modal-body">
+                        <!-- Display errors/success within the modal -->
+                        <?php
+                        if (!empty($errors)) {
+                              echo '<div class="alert alert-danger" role="alert">';
+                              foreach ($errors as $error) {
+                                 echo $error . '<br>';
+                              }
+                              echo '</div>';
+                        }
+
+                        // Display success message within the modal
+                        if (isset($success_message)) {
+                           echo '<div class="alert alert-success" role="alert">';
+                           echo $success_message;
+                           echo '</div>';
+                        }
+                        ?>
+
+                        <div class="input-group mb-3">
+                              <span class="input-group-text">New Password</span>
+                              <input type="password" class="form-control" name="password_1" required>
+                        </div>
+                        <div class="input-group mb-3">
+                              <span class="input-group-text">Confirm New Password</span>
+                              <input type="password" class="form-control" name="password_2" required>
+                        </div>
+                     </div>
+                     <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" name="newPass">Create</button>
+                     </div>
+                  </div>
+            </form>
+         </div>
+      </div>
+
         
         <!--Service Area Start-->
         <section class="services-area wf100">
@@ -1032,6 +1116,7 @@ ini_set('display_errors', 1);
          <!--Partner Logos Section End--> 
 
 
+          <!--Footer Section Start--> 
          <div class="ftco-section wf100">
             <footer class="footer">
               <svg class="footer-wave-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100" preserveAspectRatio="none">
@@ -1103,26 +1188,24 @@ ini_set('display_errors', 1);
                    </div>
                </div>
            </footer>
-</footer>
-</div>           
-      
-           
+      </div>      
+      <!--Footer Section End-->   
 
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-         
+            <script>
+            // Check if the first_login condition is met
+            if (<?php echo isset($_SESSION['first_login']) ? $_SESSION['first_login'] : '0'; ?> === 1) {
+            // If first_login is 1, trigger the modal
+            var newPassModal = new bootstrap.Modal(document.getElementById('newPass'), {
+               backdrop: 'static',
+               keyboard: false
+            });
+            newPassModal.show();
+            }
+            else{
+            newPassModal.hide()
+            }
+            </script>
+ 
             <script src="js/jquery-3.3.1.min.js"></script> 
             <script src="js/jquery-migrate-1.4.1.min.js"></script> 
             <script src="js/popper.min.js"></script> 
@@ -1131,7 +1214,7 @@ ini_set('display_errors', 1);
             <script src="js/jquery.prettyPhoto.js"></script> 
             <script src="js/isotope.min.js"></script> 
             <script src="js/Main.js"></script>
-         </body>
+</body>
 
 
 

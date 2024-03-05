@@ -1,13 +1,13 @@
 <?php
-session_start();// Start the session
-
 require("connection.php");
+
+session_start();
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 //Email Sending Requirment 
-//require 'vendor/autoload.php'; // Include the Composer-generated autoloader
+require 'vendor/autoload.php'; // Include the Composer-generated autoloader
         
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -71,7 +71,7 @@ if (isset($_POST['signup-btn'])) {
     $stmt = mysqli_prepare($con, $sql);
 
     // Bind parameters and execute the statement
-    mysqli_stmt_bind_param($stmt, "ssssss", $username, $hashed_password, $first_login, $email, $contactNumber, $firstName, $lastName);
+    mysqli_stmt_bind_param($stmt, "ssissss", $username, $hashed_password, $first_login, $email, $contactNumber, $firstName, $lastName);
     $success = mysqli_stmt_execute($stmt);
 
     if ($success) {
@@ -188,24 +188,20 @@ if (isset($_POST['newPass'])) {
             
         $success = mysqli_stmt_execute($stmt);
 
-            if ($success) {
-                $_SESSION['first_login'] = 0;
-                $success_message = "Password updated successfully!";
-                header("location:index.php");
-                exit;
-            } else {
-                // statement execution fails
-                $errors[] = "Failed to update the password.";
-            }
+        if ($success) {
+            $_SESSION['first_login'] = 0;
+            $success_message = "Password updated successfully!";
+            // Redirect to index.php after successful update
+            header("location:index.php");
+            exit;
+        } else {
+            // statement execution fails
+            $errors[] = "Failed to update the password.";
+        }
 
-            // Close the statement
-            mysqli_stmt_close($stmt);
+        // Close the statement
+        mysqli_stmt_close($stmt);
     }
-
-} else {
-    $errors = array();
-    $errors[] = "Failed to create new password, Try Again.";
-    
 }
 
 // Close the database connection

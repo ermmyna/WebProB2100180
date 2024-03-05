@@ -8,6 +8,6 @@
 
   define("UPLOAD_SRC",$_SERVER['DOCUMENT_ROOT']."/GitHub/WebProB21000180/uploads/");
 
-  define("FETCH_SRC","http://127.0.0.1/GitHub/EcoTrace/uploads/");
+  define("FETCH_SRC","http://127.0.0.1/GitHub/WebProB2100180/uploads/");
 ?>
 

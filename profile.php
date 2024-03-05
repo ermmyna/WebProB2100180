@@ -2,47 +2,44 @@
 session_start();
 require("connection.php");
 
-// Check if the 'success' parameter is set in the URL
-if (isset($_GET['success'])) {
-   $success_message = $_GET['success'];
+// Check if the database connection is established
+if (!$con) {
+    // Handle error if database connection fails
+    echo "Failed to connect to the database.";
+    exit();
 }
 
-echo '<script>openFirstLoginForm();</script>';
-
-/*
-if(isset($_SESSION['userID'])) {
-
-   // Check if it's the user's first login
-   if (isset($_GET['first_login']) && $_GET['first_login'] === 'true') {
-      echo '<script>openFirstLoginForm();</script>';
-   } else {
-      // User is logged in, retrieve user ID or other session data
-      $userID = $_SESSION['userID'];
-   }
-   
-   // Retrieve other user data as needed
-} else {
-   // Redirect to login page or handle unauthorized access
-   // header("Location: login.php");
-   // exit();
+// Retrieve user ID from the session after successful login
+if (!isset($_SESSION['userID'])) {
+    // Redirect to login page if user is not logged in
+    header("Location: login.php");
+    exit();
 }
-*/
-
-// Retrieve user data from the database
-$_SESSION['userID'] = 5;
 
 $userID = $_SESSION['userID'];
-$sql = "SELECT * FROM user WHERE id = :userID"; // Replace 'users' with your actual table name
-$stmt = $pdo->prepare($sql);
-$stmt->bindParam(':userID', $userID, PDO::PARAM_INT);
-$stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// Fetch user data from the database
+$sql = "SELECT * FROM user WHERE userID = ?";
+$stmt = mysqli_prepare($con, $sql);
+mysqli_stmt_bind_param($stmt, "i", $userID);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
+
+// Check if execute() was successful
+if (!$result) {
+    // Handle error if execute() fails
+    echo "Failed to execute the SQL statement.";
+    exit();
+}
+
+// Fetch user data as an associative array
+$user = mysqli_fetch_assoc($result);
 
 // Check if user data was found
 if (!$user) {
-   // Handle error if user data is not found
-   echo "User data not found!";
-   exit();
+    // Handle error if user data is not found
+    echo "User data not found!";
+    exit();
 }
 
 // Extract user data
@@ -52,9 +49,13 @@ $lastName = $user['lastName'];
 $email = $user['email'];
 $contactNumber = $user['contactNumber'];
 $commutingMethod = $user['commutingMethod'];
-$dietaryPreferences = $user['dietaryPreferences'];
+$dietPreferences = $user['dietPreferences'];
 $energySource = $user['energySource'];
 
+// Free the result set
+mysqli_free_result($result);
+// Close the prepared statement
+mysqli_stmt_close($stmt);
 
 ?>
 
@@ -168,51 +169,28 @@ $energySource = $user['energySource'];
       </section>
       <!--Inner Header End--> 
 
-      <div class="container">
+      <div class="profileContainer">
          <div class="main-body">
                <div class="row gutters-sm">
                   <div class="col-md-4 mb-3">
-                  <div class="card">
-                     <div class="card-body">
-                        <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
-                        <div class="mt-3">
-                           <h4>John Doe</h4>
-                           <p class="text-secondary mb-1">Full Stack Developer</p>
-                           <p class="text-muted font-size-sm">Bay Area, San Francisco, CA</p>
-                           <button class="btn btn-primary">Follow</button>
-                           <button class="btn btn-outline-primary">Message</button>
-                        </div>
+                     <div class="card">
+                        <div class="card-body">
+                           <div class="d-flex flex-column align-items-center text-center">
+                              <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Profile Picture" class="rounded-circle" width="150">
+                              <div class="mt-3">
+                                 <h4>John Doe</h4>
+                              </div>
+                              <div class="row">
+                                 <div class="col-sm-12">
+                                 <a class="aboutUs" href="#">Edit Profile</a> 
+                                 </div>
+                              </div>
+                           </div>
                         </div>
                      </div>
                   </div>
-                  <div class="card mt-3">
-                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe mr-2 icon-inline"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>Website</h6>
-                        <span class="text-secondary">https://bootdey.com</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-2 icon-inline"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>Github</h6>
-                        <span class="text-secondary">bootdey</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-twitter mr-2 icon-inline text-info"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>Twitter</h6>
-                        <span class="text-secondary">@bootdey</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-instagram mr-2 icon-inline text-danger"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>Instagram</h6>
-                        <span class="text-secondary">bootdey</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                        <h6 class="mb-0"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-facebook mr-2 icon-inline text-primary"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>Facebook</h6>
-                        <span class="text-secondary">bootdey</span>
-                        </li>
-                     </ul>
-                  </div>
-                  </div>
-                  <div class="col-md-8">
-                  <div class="card mb-3">
+                  <div class="col-md-7">
+                  <div class="card mb-1">
                      <div class="card-body">
                      <div class="row">
                         <div class="col-sm-3">
@@ -252,7 +230,7 @@ $energySource = $user['energySource'];
                         <hr>
                         <div class="row">
                         <div class="col-sm-3">
-                           <h6 class="mb-0">Contact Number</h6>
+                           <h6 class="mb-0">Contact</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
                            <?php echo $contactNumber; ?>
@@ -273,7 +251,7 @@ $energySource = $user['energySource'];
                            <h6 class="mb-0">Dietary Preferences</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                           <?php echo $dietaryPreferences; ?>
+                           <?php echo $dietPreferences; ?>
                         </div>
                         </div>
                         <hr>
@@ -283,12 +261,6 @@ $energySource = $user['energySource'];
                         </div>
                         <div class="col-sm-9 text-secondary">
                            <?php echo $energySource; ?>
-                        </div>
-                        </div>
-                        <hr>
-                        <div class="row">
-                        <div class="col-sm-12">
-                           <a class="btn btn-info " target="__blank" href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
                         </div>
                         </div>
                      </div>
@@ -350,15 +322,12 @@ $energySource = $user['energySource'];
                         </div>
                      </div>
                   </div>
-
-
-
                   </div>
                </div>
 
             </div>
          </div>
-   </div>
+      </div>
 
    <!-- FIRST-TIME LOGIN FORM -->
    <div id="first-login-modal" class="modal">
@@ -456,50 +425,6 @@ $energySource = $user['energySource'];
       }
    </script>
 
-
-   <!-- EDIT PROFILE -->
-   <!-- Modal -->
-   <div id="editProfileModal" class="modal">
-      <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Edit Profile</h2>
-      <form id="editProfileForm">
-         <!-- Input fields for editing profile details -->
-         <label for="name">Name:</label>
-         <input type="text" id="name" name="name" value="John Doe">
-         
-         <!-- Add more input fields for other profile details -->
-         
-         <button type="submit">Save Changes</button>
-      </form>
-      </div>
-   </div>
-   
-   <script>
-      // Get the Edit Profile modal
-      var editProfileModal = document.getElementById("editProfileModal");
-
-      // Get the <span> element that closes the modal
-      var span = document.getElementsByClassName("close")[1]; // Assuming it's the second element with class "close"
-
-      // When the user clicks on the button, open the modal
-      function openEditProfileModal() {
-         editProfileModal.style.display = "block";
-      }
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function() {
-         editProfileModal.style.display = "none";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function(event) {
-         if (event.target == editProfileModal) {
-            editProfileModal.style.display = "none";
-         }
-      }
-   </script>
-
 </div>
   <!-- Badges Section End -->
   <!--   JS Files Start  --> 
@@ -511,7 +436,6 @@ $energySource = $user['energySource'];
   <script src="js/jquery.prettyPhoto.js"></script> 
   <script src="js/isotope.min.js"></script> 
   <script src="js/main.js"></script>
-  <script src="js/profile.js"></script>
 </body>
 </html>
 
