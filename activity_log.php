@@ -1,15 +1,6 @@
 <?php
 include("carbon_calc.php");
 
-function isLoggedIn()
-{
-        if (isset($_SESSION['userID'])) {
-                return true;
-        }else{
-                return false;
-        }
-}
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -30,15 +21,9 @@ if (isset($_GET['success'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-      rel="stylesheet"/>
-      
     <title>Weekly Activity Log</title>
     <!-- CSS FILES START -->
     <link href="css/custom3.css" rel="stylesheet">
-    <link href="css/login.css" rel="stylesheet">
     <link href="css/color.css" rel="stylesheet">
     <link href="css/responsive.css" rel="stylesheet">
     <link href="css/owl.carousel.min.css" rel="stylesheet">
@@ -49,7 +34,7 @@ if (isset($_GET['success'])) {
 <style>
 
 #container {
-  max-width: 800px; 
+  max-width: 700px; 
 }
 .step-container {
       position: relative;
@@ -58,8 +43,8 @@ if (isset($_GET['success'])) {
 }
 
     .step-circle {
-      width: 45px;
-      height: 45px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
       background-color: #fff;
       border: 2px solid #66bb6a;
@@ -91,149 +76,89 @@ if (isset($_GET['success'])) {
     }
     
     #bikeGif {
-        position: relative;
-        animation: cycleAnimation 6s linear infinite; 
-        z-index: 1;
-    } 
-
-    
-    .h2-dashboard-txt{
-        text-align:center;
-    }
-     
-    .h2-dashboard-txt h3 {
-		color: #66bb6a;;
-		font-family: 'Poppins', sans-serif;
-		font-weight: 500;
-        line-height: 50px;
-	}
-	.h2-dashboard-txt h5 {
-		color: #1b5e20;
-		font-family: 'Poppins', sans-serif;
-		font-weight: 700;
-		margin: 15px 0;
-	}
-	.h2-dashboard-txt p {
-		font-family: 'Roboto', sans-serif;
-		font-size: 14px;
-		color: #555555;
-		line-height: 14px;
-		margin: 0 0 30px;
-	}
-    
-    .activityPic{
-        width:50%;
-        padding-top:30px;
-    }
+    position: relative;
+    animation: cycleAnimation 6s linear infinite; 
+    z-index: 1;
+}
 
 
 @keyframes cycleAnimation {
     0% {
         left: -50px; /* Initial position outside the container on the left */
-        bottom: -40px; /* Initial position below the container */
+        bottom: -35px; /* Initial position below the container */
         transform: translateY(0);
     }
     10% {
         left: 10%; /* Initial position outside the container on the left */
-        bottom: -8px; /* Initial position below the container */
-        transform: translateY(20px);
+        bottom: -6px; /* Initial position below the container */
+        transform: translateY(10px);
     }
     25% {
         left: 25%; /* Move to the right, slightly down */
-        bottom: -3px; /* Initial position below the container */
-        transform: translateY(20px);
+        bottom: -6px; /* Initial position below the container */
+        transform: translateY(10px);
     }
     50% {
         left: 50%; /* Move further right, slightly up */
-        bottom: -8px; /* Initial position below the container */
+        bottom: -6px; /* Initial position below the container */
         transform: translateY(90px);
     }
     75% {
         left: 75%; /* Move to the right, slightly down again */
-        bottom: -15px; /* Initial position below the container */
+        bottom: -6px; /* Initial position below the container */
         transform: translateY(90px);
     }
     100% {
         left: calc(100% + 50px); /* Move to the right, beyond the container */
-        bottom: -32px; /* Initial position below the container */
-        transform: translateY(10);
+        bottom: -7px; /* Initial position below the container */
+        transform: translateY(0);
     }
 }
-
-
 
 
     </style>
 </head>
 <body>
-<div class="wrapper home2">
-         <!--Header Start-->
-         <header class="header-style-2">
-            <nav class="navbar navbar-expand-lg">
-               <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
-               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
-               <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                   <ul class="navbar-nav mr-auto">
-                       <li class="nav-item">
-                           <a class="nav-link active" href="index.php">Home</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="about.html">About</a>
-                       </li>
-                       <?php if (isLoggedIn()): ?>
-                       <li class="nav-item">
-                           <a class="nav-link" href="activity_log.php">Activity Log</a>
-                       </li>
-                       <?php endif; ?>
-                       <li class="nav-item">
-                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="display4.php">Learn</a>
-                       </li>
-                       <!--
-                       <li class="nav-item">
-                           <a class="nav-link" href="#">Pages</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="contact.html">Contact</a>
-                       </li>
-                       --->
-                   </ul>
-                   <?php if (isLoggedIn()): ?>
-                     <!-- If user is logged in, show profile circle -->
-                     <li class="nav-item profile-dropdown">
-                        <img src="images/profile.jpg" class="profile" />
-                        <ul class="profile-menu">
-                           <li class="sub-item">
-                               <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
-                                  <span class="material-icons-outlined"> manage_accounts </span>
-                                  <p>Update Profile</p>
-                               </a>
-                           </li>
-                           <!-- Other profile-related items -->
-                           <li class="sub-item">
-                                 <a href="index.php?logout=true" style="display: flex; align-items: center; text-decoration: none;"> <!-- Log out link -->
-                                    <span class="material-icons-outlined"> logout </span>
-                                    <p>Logout</p>
-                                 </a>
-                           </li>
-                        </ul>
-                     </li>
+  <div class="wrapper">
+    <!--Header Start-->
+    <header class="header-style-2">
+        <nav class="navbar navbar-expand-lg">
+            <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px"></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.php">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="about.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="events-grid.html">Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="causes.html">Causes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="blog.html">Blogs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Pages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.html">Contact</a>
+                    </li>
+                </ul>
 
-               <?php else: ?>
-                     <!-- If user is not logged in, show login button -->
-                     <li class="nav-item" style="list-style: none;">
-                        <a class="login-btn" href="login.php" role="button"> Login </a>
-                     </li>
-               <?php endif; ?>
-               
+                <li class="nav-item" style="list-style: none;">
+                    <a class="login-btn" href="login-page" role="button"> Login </a>
+                </li>
             </div>
-         
-            </nav>
-            
-         </header>
-         <!--Header End-->
+        
+        </nav>
+        
+    </header>
+    <!-- Header End -->
 
     <!--Inner Header Start-->
     <section class="wf100 inner-header">
@@ -241,43 +166,11 @@ if (isset($_GET['success'])) {
             <h1>Weekly Activity Log</h1>
         </div>
     </section>
-    <!--Inner Header End-->
-
+    <!--Inner Header End--> 
 
     <!-- Activity Log Form Start -->
-    <div id="container" class="container mt-5" style="padding-top:110px;">
-
-<?php 
-
-if(isset($_GET['alert']))
-{
-  if($_GET['alert']=='storing')
-  {
-    echo<<<alert
-    <div class="container alert alert-danger alert-dismissible text-center custom-alert style="margin-bottom:30px;margin-top:20px;" id="alert-msg" role="alert">
-      <strong>Error While Storing Data!</strong>
-    </div>
-    alert;
-  }
-
-}
-
-else if(isset($_GET['success']))
-{
-  if($_GET['success']=='updated')
-  {
-    echo<<<alert
-    <div class="container alert alert-success alert-dismissible text-center custom-alert"style="margin-bottom:30px;margin-top:20px;" id="success-msg" role="alert">
-      <strong>"Your weekly log has been sucessfully updated!"</strong>
-    </div>
-    alert;
-  }
-
-}
-?>
-
-<?php if (!weeklyLogUpToDate($con)): ?>
-        <div class="progress px-" style="height: 5px;">
+    <div id="container" class="container mt-5">
+        <div class="progress px-1" style="height: 5px;">
             <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div class="step-container d-flex justify-content-between">
@@ -294,26 +187,21 @@ else if(isset($_GET['success']))
                      <div id="car_owner_questions" class="form-group">
                         <!-- Car owner questions -->
                         <label>How many kilometers did you drive your car this week?</label>
-                        <input type="number" name="car_kilometers" min="0" step="1" class="form-control" required>
+                        <input type="number" name="car_kilometers" min="0" step="1" class="form-control">
                         <label>Were there any carpooling instances this week? If yes, how many times?</label>
-                        <input type="number" name="carpool_instances" min="0" step="1" class="form-control" required>
+                        <input type="number" name="carpool_instances" min="0" step="1" class="form-control">
                      </div>
 
                      <div id="public_transportation_questions" class="form-group">
                         <!-- Public transportation questions -->
                         <label>How many times did you use public transportation this week?</label>
-                        <input type="number" name="public_transportation_times" min="0" step="1" class="form-control" required>
-                        <label>How many times did you use a bicycle as a mode of transportation this week?</label>
-                        <input type="number" name="bicycle_times" min="0" step="1" class="form-control" required>
+                        <input type="number" name="public_transportation_times" min="0" step="1" class="form-control">
                      </div>
 
                      <div id="active_commuter_questions" class="form-group">
                         <!-- Active commuter questions -->
                         <label>How many days did you walk or cycle as your primary mode of transportation this week?</label>
-                        <input type="number" name="active_commuter_days" min="0" step="1" class="form-control" required>
-                        <label>How many kilometers did you cover using an electric scooter or motorbike?</label>
-                        <input type="number" name="electric_scooter_days" min="0" step="1" class="form-control" required>
-                        
+                        <input type="number" name="active_commuter_days" min="0" step="1" class="form-control">
                      </div>
 
                      <div class="col-md-12 text-center">
@@ -329,25 +217,25 @@ else if(isset($_GET['success']))
                      <div id="meat_lover_questions" class="form-group">
                         <!-- Meat lover questions -->
                         <label>How many servings of red meat (beef, lamb, pork) did you consume this week?</label>
-                        <input type="number" name="red_meat_servings" min="0" step="1" class="form-control" required>
+                        <input type="number" name="red_meat_servings" min="0" step="1" class="form-control">
                         <label>How many servings of poultry (chicken, turkey) did you consume this week?</label>
-                        <input type="number" name="poultry_servings" min="0" step="1" class="form-control" required>
+                        <input type="number" name="poultry_servings" min="0" step="1" class="form-control">
                         <label>How many servings of fish did you consume this week?</label>
-                        <input type="number" name="fish_servings" min="0" step="1" class="form-control" required>
+                        <input type="number" name="fish_servings" min="0" step="1" class="form-control">
                      </div>
 
                      <div id="vegetarian_questions" class="form-group">
                         <!-- Vegetarian questions -->
                         <label>How many plant-based meals did you have this week?</label>
-                        <input type="number" name="plant_based_meals" min="0" step="1" class="form-control" required>
+                        <input type="number" name="plant_based_meals" min="0" step="1" class="form-control">
                         <label>How many servings of tofu or other plant-based protein did you consume?</label>
-                        <input type="number" name="plant_protein_servings" min="0" step="1" class="form-control" required>
+                        <input type="number" name="plant_protein_servings" min="0" step="1" class="form-control">
                      </div>
 
                      <div id="mixed_diet_questions" class="form-group">
                         <!-- Mixed diet questions -->
-                        <label>How many servings of dairy products, such as milk, cheese, or yogurt, did you consume this week?</label>
-                        <input type="number" name="mixed_diet_meals" min="0" step="1" class="form-control" required>
+                        <label>Specify the number of meat-based and plant-based meals you had this week.</label>
+                        <input type="text" name="mixed_diet_meals" class="form-control">
                      </div>
 
                      <div class="col-md-12 text-center">
@@ -365,21 +253,19 @@ else if(isset($_GET['success']))
                      <div id="heating_cooling_questions" class="form-group">
                         <!-- Heating and Cooling questions -->
                         <label>On average, how many hours per day did you use heating this week?</label>
-                        <input type="number" name="heating_hours" min="0" step="1" class="form-control" required>
+                        <input type="number" name="heating_hours" min="0" step="1" class="form-control">
                         <label>On average, how many hours per day did you use air conditioning this week?</label>
-                        <input type="number" name="ac_hours" min="0" step="1" class="form-control" required>
+                        <input type="number" name="ac_hours" min="0" step="1" class="form-control">
                      </div>
 
                      <div id="appliances_questions" class="form-group">
                         <!-- Energy-Intensive Appliances questions -->
                         <label>How many loads of laundry did you do using a washing machine this week?</label>
-                        <input type="number" name="laundry_loads" min="0" step="1" class="form-control" required>
+                        <input type="number" name="laundry_loads" min="0" step="1" class="form-control">
                         <label>How many hours did you use a dryer this week?</label>
-                        <input type="number" name="dryer_hours" min="0" step="1" class="form-control" required>
+                        <input type="number" name="dryer_hours" min="0" step="1" class="form-control">
                         <label>How many loads did you run in the dishwasher this week?</label>
-                        <input type="number" name="dishwasher_loads" min="0" step="1" class="form-control" required>
-                        <label>How many hours of electronic devices (e.g., computers, TVs, gaming consoles) were in use per day this week?</label>
-                        <input type="number" name="electronic_hours" min="0" step="1" class="form-control" required>
+                        <input type="number" name="dishwasher_loads" min="0" step="1" class="form-control">
                      </div>
 
                      <div class="col-md-12 text-center">
@@ -454,18 +340,6 @@ else if(isset($_GET['success']))
                         $('#activity-log-form').find('.step').slice(1).hide();
 
                         $(".next-step").click(function () {
-                            var currentStepFields = $(".step-" + currentStep + " input[required]");
-                            var isValid = true;
-
-                            // Check if all required fields in the current step are filled out
-                            currentStepFields.each(function() {
-                                if (!$(this).val()) {
-                                    isValid = false;
-                                    return false; // Exit the loop early if a required field is empty
-                                }
-                            });
-
-                        if (isValid) {
                             console.log("Next button clicked");
                             if (currentStep < 3) {
                                 $(".step-" + currentStep).addClass("animate__fadeOutLeft");
@@ -476,79 +350,32 @@ else if(isset($_GET['success']))
                                     updateProgressBar();
                                 }, 500);
                             }
-                        } else {
-                            // Prevent the form from advancing to the next step
-                            return false;
-                        }
-                    });
+                        });
 
-                    $(".prev-step").click(function () {
-                        console.log("previous button clicked");
-                        if (currentStep > 1) {
-                            $(".step-" + currentStep).addClass("animate__fadeOutRight");
-                            currentStep--;
-                            setTimeout(function () {
-                                $(".step").removeClass("animate__animated animate__fadeOutRight").hide();
-                                $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInLeft");
-                                updateProgressBar();
-                            }, 500);
-                        }
-                    });
-
-                    // Function to validate form before submitting
-                    $("form").submit(function() {
-                        var currentStepFields = $(".step-" + currentStep + " input[required]");
-                        var isValid = true;
-
-                        // Check if all required fields in the current step are filled out
-                        currentStepFields.each(function() {
-                            if (!$(this).val()) {
-                                isValid = false;
-                                return false; // Exit the loop early if a required field is empty
+                        $(".prev-step").click(function () {
+                            console.log("previous button clicked");
+                            if (currentStep > 1) {
+                                $(".step-" + currentStep).addClass("animate__fadeOutRight");
+                                currentStep--;
+                                setTimeout(function () {
+                                    $(".step").removeClass("animate__animated animate__fadeOutRight").hide();
+                                    $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInLeft");
+                                    updateProgressBar();
+                                }, 500);
                             }
                         });
 
-                        if (!isValid) {
-                            // Display error message if any required field is empty
-                            alert("Please fill out all required fields before proceeding.");
-                            return false; // Prevent form submission
-                        }
+                        updateProgressBar();
                     });
 
-                    updateProgressBar();
-                });
-
-                </script>
+                      
+                    </script>
                     <img src="images/lets-go-outside-saying-hello.gif" alt="Bike Ride Gif" id="bikeGif">
-                      <!-- Activity Log Form End -->
-                       
-                      <!-- Up to Date Message Start -->
 
-                    <?php else: ?>
-                        <div class="contain">
-                        <div class="row ">
-                            <div class="col-12" style="padding-bottom:20px; text-align:center;">
-                                <img src="images/complete.png" class="activityPic" alt="">
-                            </div>
-                            <div class="col-12">
-                            <div class="h2-dashboard-txt">
-                                <h3><b>Impressive!</b></h3>
-                                <h5>Your carbon footprint data is up to date.</h5>
-                                <p>Your efforts are helping to create a more sustainable future. Keep up the good work in reducing your carbon footprint!<p>
-                            </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <?php endif; ?>
-    
+      <!-- Activity Log Form End -->
 
       <!-- Footer section -->
-<?php if (!weeklyLogUpToDate($con)): ?>
-      <div class="ftco-section wf100 ">
-<?php else: ?>
-     <div class="ftco-section wf100 pt80 "> 
-<?php endif; ?>
+      <div class="ftco-section wf100">
             <footer class="footer">
               <svg class="footer-wave-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100" preserveAspectRatio="none">
                 <path class="footer-wave-path" d="M851.8,100c125,0,288.3-45,348.2-64V0H0v44c3.7-1,7.3-1.9,11-2.9C80.7,22,151.7,10.8,223.5,6.3C276.7,2.9,330,4,383,9.8 c52.2,5.7,103.3,16.2,153.4,32.8C623.9,71.3,726.8,100,851.8,100z"></path>
@@ -628,60 +455,5 @@ else if(isset($_GET['success']))
   <script src="js/owl.carousel.min.js"></script> 
   <script src="js/isotope.min.js"></script> 
   <script src="js/main.js"></script>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-  <script>
-    $(document).ready(function () {
-        $('#activity-log-form').find('.step').slice(1).hide();
-
-        $(".next-step").click(function () {
-            var currentStepFields = $(".step-" + currentStep + " input[required]");
-            var isValid = true;
-
-            // Check if all required fields in the current step are filled out
-            currentStepFields.each(function() {
-                if (!$(this).val()) {
-                    isValid = false;
-                    return false; // Exit the loop early if a required field is empty
-                }
-            });
-
-            if (isValid) {
-                console.log("Next button clicked");
-                if (currentStep < 3) {
-                    $(".step-" + currentStep).addClass("animate__fadeOutLeft");
-                    currentStep++;
-                    setTimeout(function () {
-                        $(".step").removeClass("animate__animated animate__fadeOutLeft").hide();
-                        $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInRight");
-                        updateProgressBar();
-                    }, 500);
-                }
-            } else {
-                alert("Please fill out all required fields before proceeding.");
-                // Prevent the form from advancing to the next step
-                return false;
-            }
-        });
-
-        $(".prev-step").click(function () {
-            console.log("previous button clicked");
-            if (currentStep > 1) {
-                $(".step-" + currentStep).addClass("animate__fadeOutRight");
-                currentStep--;
-                setTimeout(function () {
-                    $(".step").removeClass("animate__animated animate__fadeOutRight").hide();
-                    $(".step-" + currentStep).show().addClass("animate__animated animate__fadeInLeft");
-                    updateProgressBar();
-                }, 500);
-            }
-        });
-
-        updateProgressBar();
-    });
-
-    </script>
-
 </body>
 </html>
