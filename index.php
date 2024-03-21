@@ -5,6 +5,32 @@ include("accounts.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+function weeklyLogUpToDate($con) {
+   // Get the current week number
+   $today = new DateTime('now');
+   $firstDayOfMonth = new DateTime('first day of this month');
+   $daysDiff = $today->diff($firstDayOfMonth)->days;
+   $weekNumber = ceil(($daysDiff + 1) / 7);
+
+   // Get the month name
+   $month = $today->format('F');
+
+   // Get the userID from the session
+   $userID = $_SESSION['userID'];
+
+   // Check if there is an entry for the current week in the current month
+   $checkQuery = "SELECT * FROM weeklylog WHERE userID = '$userID' AND weekNo = '$weekNumber' AND month = '$month'";
+   $result = mysqli_query($con, $checkQuery);
+
+   if ($result && mysqli_num_rows($result) > 0) {
+       // User has already entered the weekly log for the current week in the current month
+       return true;
+   } else {
+       // User has not entered the weekly log for the current week in the current month
+       return false;
+   }
+}
+
  ?>
 
 <html>
@@ -26,14 +52,14 @@ ini_set('display_errors', 1);
 
       <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
       rel="stylesheet"/>
 
    
       <!-- CSS FILES START -->
       <link href="css/custom3.css" rel="stylesheet">
       <link href="css/login.css" rel="stylesheet">
+      <link href="css/notification.css" rel="stylesheet">
       <link href="css/color.css" rel="stylesheet">
       <link href="css/responsive.css" rel="stylesheet">
       <link href="css/owl.carousel.min.css" rel="stylesheet">
@@ -85,9 +111,11 @@ ini_set('display_errors', 1);
                        <li class="nav-item">
                            <a class="nav-link" href="about.html">About</a>
                        </li>
+                       <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
                            <a class="nav-link" href="activity_log.php">Activity Log</a>
                        </li>
+                       <?php endif; ?>
                        <li class="nav-item">
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
@@ -105,6 +133,50 @@ ini_set('display_errors', 1);
                    </ul>
                    <?php if (isLoggedIn()): ?>
                      <!-- If user is logged in, show profile circle -->
+                     <li class="nav-item" style="list-style: none;">
+                     <!-- If user is not logged in, show login button -->
+                     <div class="notification" >
+                        <div class="notBtn" href="#">
+                           <?php if (weeklyLogUpToDate($con)) : ?>
+                              <div class="number"></div>
+                           <?php else : ?>
+                              <div class="number">1</div
+                           <?php endif; ?>
+                              <i class="fas fa-bell"></i>
+                              <div class="box">
+                                 <div class="display">
+                                    <?php if (weeklyLogUpToDate($con)) : ?>
+                                       <div class="container" style= "padding-top:25px;">
+                                          <div class="row">
+                                             <div class="col-3">
+                                             <img class="icon" style="width:60px; margin-left:8px;" src="https://cdn-icons-png.flaticon.com/128/8832/8832119.png" alt="Update Weekly Log Icon">
+                                             </div>
+                                             <div class="col-8">
+                                             <div class="cent">You're all caught up!</div>
+                                            </div>
+                                          </div>
+                                    <?php else : ?>
+                                       <div class="container" style= "padding-top:22px;">
+                                          <div class="row">
+                                             <div class="col-3">
+                                                   <img class="icon" style="width:50px;" src="https://cdn-icons-png.flaticon.com/128/10308/10308693.png" alt="Update Weekly Log Icon">
+                                             </div>
+                                             <div class="col-8">
+                                                   <div class="cent">Please update your weekly log for this week</div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    <?php endif; ?>
+                                    <!-- <div class="cont">
+                                          Your existing notification content goes here -->
+                                          <!-- ... 
+                                    </div>
+                                    -->
+                                 </div>
+                              </div>
+                              </div>
+                        </div>
+                     </li>
                      <li class="nav-item profile-dropdown">
                         <img src="images/profile.jpg" class="profile" />
                         <ul class="profile-menu">
@@ -125,7 +197,6 @@ ini_set('display_errors', 1);
                      </li>
 
                <?php else: ?>
-                     <!-- If user is not logged in, show login button -->
                      <li class="nav-item" style="list-style: none;">
                         <a class="login-btn" href="login.php" role="button"> Login </a>
                      </li>
@@ -155,21 +226,26 @@ ini_set('display_errors', 1);
                      <div class="modal-body">
                         <!-- Display errors/success within the modal -->
                         <?php
-                        if (!empty($errors)) {
-                              echo '<div class="alert alert-danger" role="alert">';
-                              foreach ($errors as $error) {
-                                 echo $error . '<br>';
-                              }
-                              echo '</div>';
-                        }
+                        
+                             // Display success message within the modal
+                              if (isset($_SESSION['success_message'])) {
+                                 echo '<div class="alert alert-success" role="alert">';
+                                 echo $_SESSION['success_message'];
+                                 echo '</div>';
+                           }
 
-                        // Display success message within the modal
-                        if (isset($success_message)) {
-                           echo '<div class="alert alert-success" role="alert">';
-                           echo $success_message;
-                           echo '</div>';
-                        }
-                        ?>
+                           // Display errors within the modal
+                           if (!empty($_SESSION['errors'])) {
+                              
+                              //Code below does not do anything
+                                 echo '<div class="alert alert-danger" role="alert">';
+                                 foreach ($_SESSION['errors'] as $error) {
+                                    echo $error . '<br>';
+                                 }
+                                 echo '</div>';
+                                 alert;
+                           }
+                       ?>
 
                         <div class="input-group mb-3">
                               <span class="input-group-text">New Password</span>
@@ -178,6 +254,17 @@ ini_set('display_errors', 1);
                         <div class="input-group mb-3">
                               <span class="input-group-text">Confirm New Password</span>
                               <input type="password" class="form-control" name="password_2" required>
+                        </div>
+                        <div class="container"> 
+                              <?php
+                              if(isset($_GET['alert']) && $_GET['alert'] == 'not_match') {
+                                    echo <<<alert
+                                    <div class="alert alert-danger alert-dismissible text-center" id="alert-msg" role="alert">
+                                        <strong>The two passwords do not match.</strong>
+                                    </div>
+                                    alert;
+                                }
+                              ?>
                         </div>
                      </div>
                      <div class="modal-footer">
@@ -216,10 +303,10 @@ ini_set('display_errors', 1);
                           <div class="modal-body">
                               <div class="row">
                                   <div class="col-md-6">
-                                      <img src="images/cute-graphic-calculate.png" alt="Cute Graphic for Calculate" class="img-fluid">
+                                      <img src="images/calc.jpg" alt="Cute Graphic for Calculate" class="img-fluid">
                                   </div>
                                   <div class="col-md-6">
-                                      <p>Here's how you can calculate your carbon footprint:</p>
+                                      <h6>Here's how you can calculate your carbon footprint:</h6>
                                       <div class="custom-list">
                                        <div class="list-item">
                                            <span class="bullet">&#8226;</span> Register for an account on EcoTrace.
@@ -264,10 +351,10 @@ ini_set('display_errors', 1);
                           <div class="modal-body">
                               <div class="row">
                                   <div class="col-md-6">
-                                      <img src="images/cute-graphic-calculate.png" alt="Cute Graphic for Calculate" class="img-fluid">
+                                      <img src="images/recommendation.jpg" style="width:95%" alt="Cute Graphic for Calculate" class="img-fluid">
                                   </div>
                                   <div class="col-md-6">
-                                      <p>Here's how you can find your personalised recommendations:</p>
+                                      <h6>Here's how you can find your personalised recommendations:</h6>
                                       <div class="custom-list">
                                        <div class="list-item">
                                            <span class="bullet">&#8226;</span> Navigate to "Recommendations" section and explore personalized recommendations based on your carbon footprint.
@@ -294,7 +381,7 @@ ini_set('display_errors', 1);
                   <div class="sinfo">
                      <img src="images/traceable.png" alt="">
                      <h6>Track</h6>
-                     <p>Your Footprint *Trail</p>
+                     <p>Your Footprint Trail</p>
                   </div>
                </li>
                <!--box  end--> 
@@ -304,7 +391,7 @@ ini_set('display_errors', 1);
                   <div class="modal-dialog modal-lg" role="document">
                       <div class="modal-content">
                           <div class="modal-header">
-                              <h5 class="modal-title" id="trackModalLabel">Track Your Footprint *Trail</h5>
+                              <h5 class="modal-title" id="trackModalLabel">Track Your Footprint Trail</h5>
                               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                   <span aria-hidden="true">&times;</span>
                               </button>
@@ -312,10 +399,10 @@ ini_set('display_errors', 1);
                           <div class="modal-body">
                               <div class="row">
                                   <div class="col-md-6">
-                                      <img src="images/cute-graphic-calculate.png" alt="Cute Graphic for Calculate" class="img-fluid">
+                                      <img src="images/Track.jpg" alt="Cute Graphic for Calculate" class="img-fluid">
                                   </div>
                                   <div class="col-md-6">
-                                      <p>Here's how you can look back at your footprint trail:</p>
+                                      <h6>Here's how you can look back at your footprint trail:</h6>
                                       <div class="custom-list">
                                        <div class="list-item">
                                            <span class="bullet">&#8226;</span> Navigate to "History" section and Track your carbon footprint history over time.
@@ -360,10 +447,10 @@ ini_set('display_errors', 1);
                           <div class="modal-body">
                               <div class="row">
                                   <div class="col-md-6">
-                                      <img src="images/cute-graphic-calculate.png" alt="Cute Graphic for Calculate" class="img-fluid">
+                                      <img src="images/share.jpg" alt="Cute Graphic for Calculate" class="img-fluid">
                                   </div>
                                   <div class="col-md-6">
-                                      <p>Here's how you can share your achievements:</p>
+                                      <h6>Here's how you can share your achievements:</h6>
                                       <div class="custom-list">
                                        <div class="list-item">
                                            <span class="bullet">&#8226;</span> Navigate to "EcoHub" section and Share your eco-friendly achievements and milestones.
@@ -408,10 +495,10 @@ ini_set('display_errors', 1);
                           <div class="modal-body">
                               <div class="row">
                                   <div class="col-md-6">
-                                      <img src="images/cute-graphic-calculate.png" alt="Cute Graphic for Calculate" class="img-fluid">
+                                      <img src="images/learn.jpg" alt="Cute Graphic for Calculate" class="img-fluid">
                                   </div>
                                   <div class="col-md-6">
-                                      <p>Here's how you can learn more about carbon footprint and its impact:</p>
+                                      <h6>Here's how you can learn more about carbon footprint and its impact:</h6>
                                       <div class="custom-list">
                                        <div class="list-item">
                                            <span class="bullet">&#8226;</span> Navigate to "Learn" section and Learn about the environmental impacts of various activities.
@@ -459,7 +546,7 @@ ini_set('display_errors', 1);
                      <h3><b>About Us </b></h3>
                      <h5>Fostering Change through Carbon Awareness.</h5>
                      <p> At EcoTrace, we believe tracking your carbon footprint is vital for a sustainable future. It's the key to informed choices, reducing emissions, and fostering a healthier planet. That's why we've created a platform that simplifies eco-conscious living for all, empowering individuals to make a positive impacts. </p>
-                     <a class="aboutus" href="#">Join Us Now to Explore</a> 
+                     <a class="aboutus" href="login.php">Join Us Now to Explore</a> 
                   </div>
                </div>
             </div>
