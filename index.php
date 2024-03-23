@@ -5,6 +5,31 @@ include("accounts.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+function weeklyLogUpToDate($con) {
+   // Get the current week number
+   $today = new DateTime('now');
+   $firstDayOfMonth = new DateTime('first day of this month');
+   $daysDiff = $today->diff($firstDayOfMonth)->days;
+   $weekNumber = ceil(($daysDiff + 1) / 7);
+
+   // Get the month name
+   $month = $today->format('F');
+
+   // Get the userID from the session
+   $userID = $_SESSION['userID'];
+
+   // Check if there is an entry for the current week in the current month
+   $checkQuery = "SELECT * FROM weeklylog WHERE userID = '$userID' AND weekNo = '$weekNumber' AND month = '$month'";
+   $result = mysqli_query($con, $checkQuery);
+
+   if ($result && mysqli_num_rows($result) > 0) {
+       // User has already entered the weekly log for the current week in the current month
+       return true;
+   } else {
+       // User has not entered the weekly log for the current week in the current month
+       return false;
+   }
+}
  ?>
 
 <html>
@@ -34,6 +59,7 @@ ini_set('display_errors', 1);
       <!-- CSS FILES START -->
       <link href="css/custom3.css" rel="stylesheet">
       <link href="css/login.css" rel="stylesheet">
+      <link href="css/notificationBell.css" rel="stylesheet">
       <link href="css/color.css" rel="stylesheet">
       <link href="css/responsive.css" rel="stylesheet">
       <link href="css/owl.carousel.min.css" rel="stylesheet">
@@ -83,11 +109,16 @@ ini_set('display_errors', 1);
                            <a class="nav-link active" href="index.php">Home</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="about.html">About</a>
+                           <a class="nav-link" href="#about">About</a>
                        </li>
+                       <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
                            <a class="nav-link" href="activity_log.php">Activity Log</a>
                        </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="history.php">History</a>
+                       </li>
+                       <?php endif; ?>
                        <li class="nav-item">
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
@@ -105,6 +136,45 @@ ini_set('display_errors', 1);
                    </ul>
                    <?php if (isLoggedIn()): ?>
                      <!-- If user is logged in, show profile circle -->
+                     <li class="nav-item" style="list-style: none;">
+                     <!-- If user is not logged in, show login button -->
+                     <div class="notification" >
+                        <div class="notBtn" href="#">
+                           <?php if (weeklyLogUpToDate($con)) : ?>
+                              <div class="number"></div>
+                           <?php else : ?>
+                              <div class="number">1</div>
+                           <?php endif; ?>
+                              <i class="fas fa-bell" id="bell"></i>
+                              <div class="box">
+                                 <div class="display">
+                                    <?php if (weeklyLogUpToDate($con)) : ?>
+                                       <div class="container" style= "padding-top:25px;">
+                                          <div class="row">
+                                             <div class="col-3">
+                                             <img class="icon" style="width:60px; margin-left:8px;" src="https://cdn-icons-png.flaticon.com/128/8832/8832119.png" alt="Update Weekly Log Icon">
+                                             </div>
+                                             <div class="col-8">
+                                             <div class="cent">You're all caught up!</div>
+                                            </div>
+                                          </div>
+                                    <?php else : ?>
+                                       <div class="container" style= "padding-top:22px;">
+                                          <div class="row">
+                                             <div class="col-3">
+                                                   <img class="icon" style="width:50px;" src="https://cdn-icons-png.flaticon.com/128/10308/10308693.png" alt="Update Weekly Log Icon">
+                                             </div>
+                                             <div class="col-8">
+                                                   <div class="cent">Please update your weekly log for this week</div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    <?php endif; ?>
+                                 </div>
+                              </div>
+                              </div>
+                        </div>
+                     </li>
                      <li class="nav-item profile-dropdown">
                         <img src="images/profile.jpg" class="profile" />
                         <ul class="profile-menu">
@@ -125,7 +195,6 @@ ini_set('display_errors', 1);
                      </li>
 
                <?php else: ?>
-                     <!-- If user is not logged in, show login button -->
                      <li class="nav-item" style="list-style: none;">
                         <a class="login-btn" href="login.php" role="button"> Login </a>
                      </li>
