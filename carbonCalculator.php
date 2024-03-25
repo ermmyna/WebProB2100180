@@ -46,7 +46,6 @@
 <?php
 // Start the session
 session_start();
-require("connection.php");
 
 // Check if the user is logged in
 if(isset($_SESSION['username'])) {
