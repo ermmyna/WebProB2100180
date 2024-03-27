@@ -6,6 +6,39 @@
 <title>Carbon Footprint Calculator</title>
 <h1>Carbon Footprint Calculator</h1>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $transportation = isset($_POST['transportation']) ? floatval($_POST['transportation']) : 0;
+    $energy = isset($_POST['energy']) ? floatval($_POST['energy']) : 0;
+    $diet = isset($_POST['diet']) ? floatval($_POST['diet']) : 0;
+    $totalCarbonFootprint = $transportation + $energy + $diet;
+    
+    // Retrieve username from session
+    session_start();
+    $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
+
+    // Insert data into carboncalculator
+    $servername = "localhost:3307";
+    $db_username = "root";
+    $db_password = "";
+    $db_name = "bit210";
+    $conn = new mysqli($servername, $db_username, $db_password, $db_name);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+
+    $sql = "INSERT INTO carboncalculator (username, transportation, energy, diet, total_carbon_footprint) VALUES ('$username', '$transportation', '$energy', '$diet', '$totalCarbonFootprint')";
+    if ($conn->query($sql) === TRUE) {
+        echo '<script>alert("New record inserted successfully!");</script>';
+        echo '<script>window.setTimeout(function() { window.location = "carbonCalculator.php"; }, 1000);</script>'; // Redirect after 1 second
+    } else {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+
+    $conn->close();
+}
+?>
 <style>
   /* CSS styling for form */
   h1,h2{
@@ -43,23 +76,8 @@
 </head>
 <body>
 
-<?php
-// Start the session
-session_start();
 
-// Check if the user is logged in
-if(isset($_SESSION['username'])) {
-    // Get the username from the session
-    $username = $_SESSION['username'];
-} else {
-    // If user is not logged in, redirect to the login page
-    header("Location: login.php");
-    exit();
-}
-?>
 
-<!-- Display the welcome message with the retrieved username -->
-<h3>Welcome, <?php echo $username; ?>!</h3>
 
 <form id="carbonFootprintForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
     <label for="transportation">Transportation (in miles):</label>
@@ -75,39 +93,7 @@ if(isset($_SESSION['username'])) {
 </form>
 
 <div id="result">
-<?php
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $transportation = isset($_POST['transportation']) ? floatval($_POST['transportation']) : 0;
-    $energy = isset($_POST['energy']) ? floatval($_POST['energy']) : 0;
-    $diet = isset($_POST['diet']) ? floatval($_POST['diet']) : 0;
-    $totalCarbonFootprint = $transportation + $energy + $diet;
-    
-    // Retrieve username from session
-    session_start();
-    $username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 
-    // Insert data into carboncalculator
-    $servername = "localhost:3307";
-    $db_username = "root";
-    $db_password = "";
-    $db_name = "bit210";
-    $conn = new mysqli($servername, $db_username, $db_password, $db_name);
-
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-
-    $sql = "INSERT INTO carboncalculator (username, transportation, energy, diet, total_carbon_footprint) VALUES ('$username', '$transportation', '$energy', '$diet', '$totalCarbonFootprint')";
-    if ($conn->query($sql) === TRUE) {
-        echo '<script>alert("New record inserted successfully!");</script>';
-        echo '<script>window.setTimeout(function() { window.location = "carbonCalculator.php"; }, 1000);</script>'; // Redirect after 1 second
-    } else {
-        echo "Error: " . $sql . "<br>" . $conn->error;
-    }
-
-    $conn->close();
-}
-?>
 </div>
 
 <div id="dashboard">
