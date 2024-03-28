@@ -232,11 +232,23 @@ ini_set('display_errors', 1);
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                    <ul class="navbar-nav mr-auto">
-                       <li class="nav-item">
+                    <li class="nav-item">
                            <a class="nav-link active" href="index.php">Home</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="about.html">About</a>
+                           <a class="nav-link" href="#about">About</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="events.php">Events</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="carbonCalculator.php">Calculator</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="#">Learn</a>
                        </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
@@ -245,13 +257,10 @@ ini_set('display_errors', 1);
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
                        </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
+                       </li>
                        <?php endif; ?>
-                       <li class="nav-item">
-                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="carbonCalculator.php">Carbon Calculator</a>
-                       </li>
 
                    </ul>
                    <?php if (isLoggedIn()): ?>

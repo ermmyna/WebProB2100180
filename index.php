@@ -114,6 +114,15 @@ function weeklyLogUpToDate($con) {
                        <li class="nav-item">
                            <a class="nav-link" href="events.php">Events</a>
                        </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="carbonCalculator.php">Calculator</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="#">Learn</a>
+                       </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
                            <a class="nav-link" href="activity_log.php">Activity Log</a>
@@ -122,23 +131,9 @@ function weeklyLogUpToDate($con) {
                            <a class="nav-link" href="history.php">History</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="social.php">Socials</a>
+                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
                        </li>
                        <?php endif; ?>
-                       <li class="nav-item">
-                           <a class="nav-link" href="carbonCalculator.php">Dashboard</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="display4.php">Learn</a>
-                       </li>
-                       <!--
-                       <li class="nav-item">
-                           <a class="nav-link" href="#">Pages</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="contact.html">Contact</a>
-                       </li>
-                       --->
                    </ul>
                    <?php if (isLoggedIn()): ?>
                      <!-- If user is logged in, show profile circle -->

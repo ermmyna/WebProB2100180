@@ -1,10 +1,12 @@
 <?php
 
-$con = mysqli_connect("localhost:3307", "root", "", "bit210");
-if (mysqli_connect_errno()) {
-    echo "Failed to connect to MySQL: " . mysqli_connect_error();
-    exit();
-}
+require("connection.php");
+
+// $con = mysqli_connect("localhost:3307", "root", "", "bit210");
+// if (mysqli_connect_errno()) {
+//     echo "Failed to connect to MySQL: " . mysqli_connect_error();
+//     exit();
+// }
 
 session_start();
 
