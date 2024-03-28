@@ -261,6 +261,9 @@ function weeklyLogUpToDate($con) {
                      <li class="nav-item">
                            <a class="nav-link" href="activity_log.php">Activity Log</a>
                      </li>
+                     <li class="nav-item">
+                           <a class="nav-link" href="history.php">History</a>
+                       </li>
                      <?php endif; ?>
                      <li class="nav-item">
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>

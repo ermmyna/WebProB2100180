@@ -121,6 +121,9 @@ function weeklyLogUpToDate($con) {
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
                        </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="social.php">Socials</a>
+                       </li>
                        <?php endif; ?>
                        <li class="nav-item">
                            <a class="nav-link" href="carbonCalculator.php">Dashboard</a>
