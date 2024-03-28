@@ -134,11 +134,11 @@ if (isset($_POST['signup-btn'])) {
             $mail->Port = 587; // Use 465 for SSL or 587 for TLS
             $mail->SMTPSecure = 'tls'; // Use 'ssl' for SSL, 'tls' for TLS
             $mail->SMTPAuth = true;
-            $mail->Username = 'zoyak1220@gmail.com'; // Your Gmail email address
-            $mail->Password = 'xqfe pwvi dsys tito'; // Use the app password you generated
+            $mail->Username = 'ermmyna@gmail.com'; // Your Gmail email address
+            $mail->Password = 'lblp kxnl uvao cbwu'; // Use the app password you generated
     
             // Recipients
-            $mail->SetFrom('zoyak1220@gmail.com', 'EcoTrace');
+            $mail->SetFrom('ermmyna@gmail.com', 'EcoTrace');
             $mail->AddAddress($email);
     
             // Content
