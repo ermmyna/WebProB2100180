@@ -1,230 +1,108 @@
 <?php
-include("carbon_calc.php");
-
-function isLoggedIn()
-{
-        if (isset($_SESSION['userID'])) {
-                return true;
-        }else{
-                return false;
-        }
+// Function to check if user is logged in
+function isLoggedIn() {
+    // Implement your logic here to check if the user is logged in
 }
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Function to check if weekly log is up to date
+function weeklyLogUpToDate($con) {
+    // Implement your logic here to check if the weekly log is up to date
+}
+
+// Establish a connection to your MySQL database
+$servername = "localhost:3307"; // Change this to your database server name
+$username = "root"; // Change this to your database username
+$password = ""; // Change this to your database password
+$database = "bit210"; // Change this to your database name
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Fetch the latest data from the 'carbonCalculator' table
+$sql = "SELECT * FROM carbonCalculator ORDER BY id DESC LIMIT 1";
+$result = $conn->query($sql);
+
+// Process fetched data
+if ($result->num_rows > 0) {
+    // Retrieve the latest row
+    $row = $result->fetch_assoc();
+
+    // Assign carbon footprint data from the latest row to respective variables
+    $foodData = $row['diet'];
+    $energyData = $row['energy'];
+    $transportationData = $row['transportation'];
+
+    // Calculate the highest carbon footprint value among the three categories
+    $maxFootprint = max($foodData, $energyData, $transportationData);
+
+    // Calculate recommendations based on the highest value
+    $recommendations = array();
+    if ($maxFootprint == $foodData) {
+        // If food category's value is the highest, provide food-related recommendations
+        $recommendations[] = "-> Reduce food waste to lower carbon footprint.";
+        $recommendations[] = "-> Choose locally sourced and seasonal foods to reduce carbon emissions from transportation.";
+        $recommendations[] = "-> Consider plant-based meals to reduce the carbon footprint associated with meat production.";
+    } elseif ($maxFootprint == $energyData) {
+        // If energy category's value is the highest, provide energy-related recommendations
+        $recommendations[] = "-> Switch to renewable energy sources to reduce carbon emissions.";
+        $recommendations[] = "-> Install energy-efficient appliances and lighting.";
+        $recommendations[] = "-> Unplug electronic devices when not in use to save energy.";
+    } elseif ($maxFootprint == $transportationData) {
+        // If transportation category's value is the highest, provide transportation-related recommendations
+        $recommendations[] = "-> Use public transportation, bike, or walk instead of driving alone.";
+        $recommendations[] = "-> Consider carpooling or ride-sharing to reduce transportation emissions.";
+        $recommendations[] = "-> Plan and combine errands to minimize trips.";
+    } else {
+        // If no category's value is significantly higher, provide general recommendations
+        $recommendations[] = "-> Reduce, reuse, and recycle to minimize carbon footprint.";
+        $recommendations[] = "-> Conserve water and reduce water waste to lower carbon emissions associated with water treatment and distribution.";
+        $recommendations[] = "-> Support businesses and products with sustainable practices.";
+    }
+
+    // Close the database connection
+    $conn->close();
+} else {
+    echo "No data found in the carbonCalculator table.";
+}
 ?>
 
-<html>
-<meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <link rel="icon" href="images/EcoTrace Logo.png" style="width: 50px;">
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />   
-	   <meta http-equiv="X-UA-Compatible" content="chrome=1,IE=edge" />
-      <meta name="viewport" content="user-scalable=yes, initial-scale=1.0, width=320" />
-      <title>CarbonFootprint Dashboard</title> 
-      <link href='https://fonts.googleapis.com/css?family=Anton&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-      <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" crossorigin="anonymous">
-      <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.8.13/tailwind.min.css" rel='stylesheet'>
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-      <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-      rel="stylesheet"/>
-
-
-      <!-- CSS FILES START -->
-      <link href="css/custom3.css" rel="stylesheet">
-      <link href="css/login.css" rel="stylesheet">
-      <link href="css/notificationBell.css" rel="stylesheet">
-      <link href="css/color.css" rel="stylesheet">
-      <link href="css/responsive.css" rel="stylesheet">
-      <link href="css/owl.carousel.min.css" rel="stylesheet">
-      <link href="css/bootstrap.min.css" rel="stylesheet">
-      <link href="css/all.min.css" rel="stylesheet"> 
-      <!-- CSS FILES End -->
-
- <div class="stylelong">
-
-     
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Carbon Footprint Recommendations</title>
+    <!-- CSS FILES -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/1.8.13/tailwind.min.css" rel="stylesheet">
+    <link href="css/custom3.css" rel="stylesheet">
+    <link href="css/login.css" rel="stylesheet">
+    <link href="css/notificationBell.css" rel="stylesheet">
+    <link href="css/color.css" rel="stylesheet">
+    <link href="css/responsive.css" rel="stylesheet">
+    <link href="css/owl.carousel.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Anton&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+    <!-- Material Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        @font-face {
-            font-family: 'Futura Md BT';
-            font-weight: 900;
-            font-style: normal;
-        }
-
-        /* i add */
-        .body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .header {
-            background-color: #00897b;
-            color: #ffffff;
-            padding: 20px 0;
-            text-align: center;
-            font-size: 2rem;
-        }
-
-        .dashboard, .chart-container {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .card, .chart {
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        
+        /* Styles */
     </style>
-
-    <style>
-        @font-face {
-            font-family: 'Futura Hv BT';
-            font-weight: 900;
-            font-style: normal;
-        }
-    </style>
-    <style>
-       .dashboard-card {
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 3px rgba(0, 0, 0, 0.08);
-        margin-bottom:5px;
-       }
-
-       .custom-box-shadow {
-        box-shadow: 0 10px 40px rgba(156, 204, 101, 0.3);
-       }
-
-        .food_icon{
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        height: 100px;
-        width: 100px;
-        margin-right: -8px;
-        margin-bottom: -20px;
-        color: red; /* Change to your desired color */
-        opacity: 0.1;
-        }
-
-        .energy_icon{
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        height: 92px;
-        width: 92px;
-        margin-bottom: -10px;
-        color: green; /* Change to your desired color */
-        opacity: 0.1;
-        }
-
-        .transport_icon{
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        height: 90px;
-        width: 90px;
-        margin-bottom: -10px;
-        margin-right:4px;
-        color: orange; /* Change to your desired color */
-        opacity: 0.1;
-        }
-
-        .add_icon{
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        height: 90px;
-        width: 90px;
-        margin-bottom: -10px;
-        margin-right:4px;
-        color: orange; /* Change to your desired color */
-        opacity: 0.1;
-        }
+</head>
+<body>
 
 
-     #donutChart {
-        max-width: 400px;  /* Set the maximum width as needed */
-        max-height: 400px; /* Set the maximum height as needed */
-        margin:20px;
-    }
-
-    #lineChart{
-        min-width: 400px;  /* Set the maximum width as needed */
-        min-height: 300px; /* Set the maximum height as needed */
-        margin:20px;
-    }
-
-	.pt40 {
-		padding-top: 40px;
-	}
-	
-	.h2-dashboard-txt h3 {
-		color: #66bb6a;;
-		font-family: 'Poppins', sans-serif;
-		font-weight: 500;
-	}
-	.h2-dashboard-txt h6 {
-		color: #1b5e20;
-		font-family: 'Poppins', sans-serif;
-		font-weight: 700;
-		margin: 15px 0;
-	}
-	.h2-dashboard-txt p {
-		font-family: 'Roboto', sans-serif;
-		font-size: 16px;
-		color: #555555;
-		line-height: 28px;
-		margin: 0 0 30px;
-	}
-    .navPic{
-        margin: 20px;
-        border:4px solid #ADDFA4;
-        border-radius: 500%;
-        -webkit-border-radius: 500px;
-        -moz-border-radius: 500px;
-        }
-
-            .h2-dashboard-txt a {
-                background: #66bb6a;
-                color: #fff;
-                display: inline-block;
-                line-height: 44px;
-                border-radius: 5px;
-                padding: 0 50px;
-                font-weight: 600;
-                text-transform: uppercase;
-                font-family: 'Poppins', sans-serif;
-                margin-bottom:-50px;
-                margin-top:-30px;
-            }
-            .h2-dashboard-txt a:hover {
-                background: #33691e;
-                color: #fff;
-            }
-
-            .dashboard-card {
-    border-radius: 999px; /* Use a large value to create an oval shape */
-}
-    </style>
- </div>
-      
-   </head>
-   <body>
-      <div class="wrapper home2">
+    <div class="wrapper home2">
          <!--Header Start-->
          <header class="header-style-2">
             <nav class="navbar navbar-expand-lg">
@@ -248,12 +126,6 @@ ini_set('display_errors', 1);
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="carbonCalculator.php">Carbon Calculator</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(chat).php">Chat Room</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchivement).php">Share Achievement</a>
                        </li>
                        <!--
                        <li class="nav-item">
@@ -341,7 +213,9 @@ ini_set('display_errors', 1);
           <!--Inner Header Start-->
           <section class="wf100 inner-header">
             <div class="container">
-               <h1>Carbon Footprint Dashboard</h1>
+               <h1>Carbon Footprint Recommendations</h1><br><Br><br><Br>
+               <h1>From Calculator</h1>
+               
             </div>
          </section>
          <!--Inner Header End--> 
@@ -434,6 +308,7 @@ ini_set('display_errors', 1);
                     // Handle the case where $con is not defined or is not a valid mysqli connection
                     echo "Database connection is not established or is invalid.";
                 }
+                
 
 
                     // LINE GRAPH CALCULATION 
@@ -534,12 +409,17 @@ ini_set('display_errors', 1);
                     <?php echo number_format($totalOverall,2) ?> 
                      <span class="text-sm">kgCO2e</span>
                 </div>
-               <div class="relative">
-    <div class="relative z-10 text-orange-200 leading-none font-semibold">
-        Total Footprint
-    </div>
-    <div class="add_icon" style="display: inline-block; vertical-align: middle;">
-        <img src="https://cdn-icons-png.flaticon.com/128/992/992651.png">
+                <div class="relative z-10 text-orange-200 leading-none font-semibold">Total Footprint</div>
+                <i class="add_icon"> <img src="https://cdn-icons-png.flaticon.com/128/992/992651.png"></i>
+                </div>
+
+        <!-- Footer Section -->
+        <footer class="footer-03">
+            <div class="container">
+                <!-- Footer Content -->
+            </div>
+        </footer>
+        <!-- Footer Section End -->
     </div>
                
             </div>
@@ -565,22 +445,9 @@ ini_set('display_errors', 1);
                             <canvas id="lineChart"></canvas>
                         </div>
                     </div>
-                    <Br>
-                    <!-- Button for opening recomm2.php -->
-                    <div style="text-align: right;">
-                    <button onclick="openRecomm2()" class="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" style="display: inline-block; vertical-align: middle;">
-                     View Dashboard's Recommendations
-                    </button>
-                </div>
                 </div>
             </div>
         </div>
-
-        <script>
-    function openRecomm2() {
-        window.open("recommDashboard.php", "_blank");
-    }
-</script>
         
         <?php endif; ?>
     <?php else: ?>
@@ -592,42 +459,90 @@ ini_set('display_errors', 1);
                   </div>
                   <div class="col-lg-7 col-md-6 pt40 col-sm-16">
                   <div class="h2-dashboard-txt">
-                     <h3><b>Hello There!</b></h3>
-                     <h6>We see that you want to make a change by tracking your Carbon Footprint</h6>
-                     <p> To get started, the <b>1st step</b> is to create an account. Click on the <b>"Login"</b> button on the Navigation bar at the top or the <b>"Sign up"</b> button below and provide the necessary information to set up your EcoTrace account. Creating an account will allow you to log and track your daily activities, making it easier to monitor and reduce your carbon footprint.</p>
-                     <a class="aboutus" href="login.php">Sign up</a> 
+
                   </div>
                   </div>
                </div>
               <div class="row">
                  <div class="col-lg-7 col-md-6 col-sm-16" style="padding-left:20px;">
                   <div class="h2-dashboard-txt">
-                     <h3><b>Ready to Make a Difference?</b></h3>
-                     <h6>Log Your Daily Activities for Precise Carbon Tracking.</h6>
-                     <p> Now that you have an account, proceed to the <b>"Activity Log"</b> page on the nav. Here, you can log various aspects of your daily routine, including transportation, energy usage, and food consumption. <b>Don't worry;</b> it's a straightforward process that contributes significantly to your commitment to sustainability.</p>
                   </div>
-                  </div>
-                  <div class="col-lg-5 col-md-6 col-sm-6" style="margin-top:20px;">
-                    <img src="https://media.tenor.com/MlHKXX_Uh40AAAAj/klick-click.gif" style=" width:40px;position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); z-index: 2;">
-                    <!-- Image to be Clicked -->
-                    <img class="navPic" src="images/activitynav.png" style="height: 40%;" alt="">     
-                 </div>
               </div>
               <div class="row ">
                   <div class="col-lg-5 col-md-6 col-sm-6">
                      <img src="images/dash.jpg"  style = "height:78%; margin-right:50px;"alt="">
                   </div>
+                  
+                  <!-- Content Section -->
+<div class="container">
+    <div class="center" style="margin-left: 40px;"> <!-- Adjust margin-left as needed -->
+        <style>
+            table {
+                border-collapse: collapse;
+                width: 100%;
+            }
+            th, td {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 7px 12px; /* Added extra padding on the right side */
+            }
+            th {
+                background-color: #f2f2f2;
+            }
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            .highlight-row{
+                background-color: lightgreen;
+            }
+        </style>
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Carbon Footprint (kgCO2e)</th>
+                <th>Recommendations</th>
+            </tr>
+            <tr>
+                <td>Food</td>
+                <td><?php echo $foodData; ?></td>
+                <td rowspan="4">
+                    <ul>
+                        <?php foreach ($recommendations as $recommendation): ?>
+                            <li><?php echo $recommendation; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Energy</td>
+                <td><?php echo $energyData; ?></td>
+            </tr>
+            <tr>
+                <td>Transportation</td>
+                <td><?php echo $transportationData; ?></td>
+            </tr>
+            <tr class="highlight-row">
+                <td><strong>Highest Category</strong></td>
+                <td><strong><?php echo $maxFootprint; ?></strong></td>
+            </tr>
+        </table>
+    </div>
+<!-- Content Section End -->
+
+
+        <!-- Footer Section -->
+        <footer class="footer-03">
+            <div class="container">
+                <!-- Footer Content -->
+            </div>
+        </footer>
+        <!-- Footer Section End -->
+    </div>
                   <div class="col-lg-7 col-md-6 col-sm-16">
                   <div class="h2-dashboard-txt pt40" style="margin-top:15px;">
-                     <h3><b>Track and Analyze Your Carbon Footprint</b></h3>
-                     <h6>Unlock Powerful Insights for a Greener Lifestyle.</h6>
-                     <p> <b>Congratulations</b> on logging your activities! Head over to the <b>"Dashboard"</b> page in the navigation while logged into your account to visualize your carbon footprint. Here, you can <b>track your weekly and overall monthly carbon footprint </b>. The intuitive charts and graphs provide valuable insights into your environmental impact. Use this information to make informed decisions and explore ways to reduce your carbon footprint further.</p>
-                  </div>
+                    </div>
                   </div> 
                </div>
-               <div class="h2-dashboard-txt wf100" style="text-align: center;">
-                    <a href="index.php"><i class="fas fa-home"></i> Go Home </a>
-                  </div>
             </div>
                   
          </section>
@@ -827,7 +742,6 @@ var lineChart = new Chart(lineCtx, {
                 }
             }
         },
-
         legend: {
             display: true,
             position: 'bottom'
@@ -836,8 +750,8 @@ var lineChart = new Chart(lineCtx, {
         maintainAspectRatio: false,
         onClick: handleLineChartClick
     }
-    
 });
+
 
                 var preloadedData = {};
                 <?php
@@ -882,7 +796,5 @@ var lineChart = new Chart(lineCtx, {
             }
 
             </script>
-            
-   </body>
-    </head>
-    </html>
+</body>
+</html>
