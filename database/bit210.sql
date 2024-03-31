@@ -159,5 +159,11 @@ CREATE TABLE `feedback` (
   CONSTRAINT `fk_feedback_user` FOREIGN KEY (`userID`) REFERENCES `user` (`userID`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
+CREATE TABLE events (
+    eventId INT AUTO_INCREMENT PRIMARY KEY,
+    eventName VARCHAR(255) NOT NULL,
+    organizers VARCHAR(255) NOT NULL,
+    date DATE NOT NULL,
+    time VARCHAR(50) NOT NULL
+);
 
