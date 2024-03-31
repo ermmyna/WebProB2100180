@@ -1,8 +1,5 @@
 <?php
-// Function to check if user is logged in
-function isLoggedIn() {
-    // Implement your logic here to check if the user is logged in
-}
+include("accounts.php");
 
 // Function to check if weekly log is up to date
 function weeklyLogUpToDate($con) {

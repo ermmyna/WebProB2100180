@@ -1,8 +1,7 @@
 <?php
-// Function to check if user is logged in
-function isLoggedIn() {
-    // Implement your logic here to check if the user is logged in
-}
+
+include("accounts.php");
+
 
 // Function to check if weekly log is up to date
 function weeklyLogUpToDate($con) {
@@ -10,7 +9,7 @@ function weeklyLogUpToDate($con) {
 }
 
 // Establish a connection to your MySQL database
-$servername = "localhost:3307"; // Change this to your database server name
+$servername = "localhost"; // Change this to your database server name
 $username = "root"; // Change this to your database username
 $password = ""; // Change this to your database password
 $database = "bit210"; // Change this to your database name
@@ -112,7 +111,7 @@ $recommendations[] = "-> Set goals to reduce your overall carbon footprint over 
 
 
     <div class="wrapper home2">
-         <!--Header Start-->
+          <!--Header Start-->
       <header class="header-style-2">
          <nav class="navbar navbar-expand-lg">
                <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
