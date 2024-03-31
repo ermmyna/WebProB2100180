@@ -99,17 +99,14 @@ function weeklyLogUpToDate($con) {
    <body>
       <div class="wrapper home2">
          <!--Header Start-->
-         <header class="header-style-2">
-            <nav class="navbar navbar-expand-lg">
+      <header class="header-style-2">
+         <nav class="navbar navbar-expand-lg">
                <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                   <ul class="navbar-nav mr-auto">
-                       <li class="nav-item">
+                  <ul class="navbar-nav mr-auto">
+                     <li class="nav-item">
                            <a class="nav-link active" href="index.php">Home</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="#about">About</a>
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="events.php">Events</a>
@@ -121,7 +118,7 @@ function weeklyLogUpToDate($con) {
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="#">Learn</a>
+                           <a class="nav-link" href="display4.php">Learn</a>
                        </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
@@ -130,12 +127,9 @@ function weeklyLogUpToDate($con) {
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
                        </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
-                       </li>
                        <?php endif; ?>
-                   </ul>
-                   <?php if (isLoggedIn()): ?>
+                  </ul>
+                  <?php if (isLoggedIn()): ?>
                      <!-- If user is logged in, show profile circle -->
                      <li class="nav-item" style="list-style: none;">
                      <!-- If user is not logged in, show login button -->
@@ -180,6 +174,18 @@ function weeklyLogUpToDate($con) {
                         <img src="images/profile.jpg" class="profile" />
                         <ul class="profile-menu">
                            <li class="sub-item">
+                               <a href="socialInt(chat).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Chat Room</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
+                               <a href="socialInt(shareAchivement).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Share Achievements</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
                                <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
                                   <span class="material-icons-outlined"> manage_accounts </span>
                                   <p>Update Profile</p>
@@ -201,11 +207,12 @@ function weeklyLogUpToDate($con) {
                      </li>
                <?php endif; ?>
                
-            </div>
+         </div>
          
-            </nav>
-            
-         </header>
+         </nav>
+         
+      </header>
+      <!-- Header End -->
 
      
          <div id="index_hype_container" style="margin:auto;position:relative;overflow:hidden;">

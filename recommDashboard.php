@@ -1,8 +1,7 @@
 <?php
-// Function to check if user is logged in
-function isLoggedIn() {
-    // Implement your logic here to check if the user is logged in
-}
+
+include("accounts.php");
+
 
 // Function to check if weekly log is up to date
 function weeklyLogUpToDate($con) {
@@ -10,7 +9,7 @@ function weeklyLogUpToDate($con) {
 }
 
 // Establish a connection to your MySQL database
-$servername = "localhost:3307"; // Change this to your database server name
+$servername = "localhost"; // Change this to your database server name
 $username = "root"; // Change this to your database username
 $password = ""; // Change this to your database password
 $database = "bit210"; // Change this to your database name
@@ -112,40 +111,41 @@ $recommendations[] = "-> Set goals to reduce your overall carbon footprint over 
 
 
     <div class="wrapper home2">
-         <!--Header Start-->
-         <header class="header-style-2">
-            <nav class="navbar navbar-expand-lg">
+          <!--Header Start-->
+      <header class="header-style-2">
+         <nav class="navbar navbar-expand-lg">
                <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                   <ul class="navbar-nav mr-auto">
-                       <li class="nav-item">
+                  <ul class="navbar-nav mr-auto">
+                     <li class="nav-item">
                            <a class="nav-link active" href="index.php">Home</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="about.html">About</a>
+                           <a class="nav-link" href="events.php">Events</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="carbonCalculator.php">Calculator</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="display4.php">Learn</a>
                        </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
                            <a class="nav-link" href="activity_log.php">Activity Log</a>
                        </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="history.php">History</a>
+                       </li>
+                       <li class="nav-item">
+                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
+                       </li>
                        <?php endif; ?>
-                       <li class="nav-item">
-                           <a class="nav-link" href="carbon_dash.php">Dashboard</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="carbonCalculator.php">Carbon Calculator</a>
-                       </li>
-                       <!--
-                       <li class="nav-item">
-                           <a class="nav-link" href="#">Pages</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="contact.html">Contact</a>
-                       </li>
-                       --->
-                   </ul>
-                   <?php if (isLoggedIn()): ?>
+                  </ul>
+                  <?php if (isLoggedIn()): ?>
                      <!-- If user is logged in, show profile circle -->
                      <li class="nav-item" style="list-style: none;">
                      <!-- If user is not logged in, show login button -->
@@ -190,6 +190,18 @@ $recommendations[] = "-> Set goals to reduce your overall carbon footprint over 
                         <img src="images/profile.jpg" class="profile" />
                         <ul class="profile-menu">
                            <li class="sub-item">
+                               <a href="socialInt(chat).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Chat Room</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
+                               <a href="socialInt(shareAchivement).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Share Achievements</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
                                <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
                                   <span class="material-icons-outlined"> manage_accounts </span>
                                   <p>Update Profile</p>
@@ -211,13 +223,12 @@ $recommendations[] = "-> Set goals to reduce your overall carbon footprint over 
                      </li>
                <?php endif; ?>
                
-               
-            </div>
+         </div>
          
-            </nav>
-            
-         </header>
-         <!--Header End-->
+         </nav>
+         
+      </header>
+      <!-- Header End -->
 
           <!--Inner Header Start-->
           <section class="wf100 inner-header">

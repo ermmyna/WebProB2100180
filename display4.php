@@ -1,13 +1,30 @@
 <?php
-
 include("accounts.php");
+// error_reporting(E_ALL);
+// ini_set('display_errors', 1);
 
-// Check if the success message is set in the session
-if (isset($_SESSION['success_message'])) {
-   $success_message = $_SESSION['success_message'];
-   // Unset the session variable to clear the message after displaying it once
-   unset($_SESSION['success_message']);
+// Check if the 'success' parameter is set in the URL
+if (isset($_GET['success'])) {
+    $success_message = $_GET['success'];
 }
+
+// Number of items per page
+$itemsPerPage = 6;
+
+// Get current page
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
+$offset = ($page - 1) * $itemsPerPage;
+
+// Fetch content with pagination
+$query = "SELECT title, description, content FROM eduContent LIMIT $offset, $itemsPerPage";
+$result = mysqli_query($con, $query);
+$fetch_src = FETCH_SRC;
+
+// Pagination navigation
+$queryCount = "SELECT COUNT(*) AS total FROM eduContent";
+$resultCount = mysqli_query($con, $queryCount);
+$rowCount = mysqli_fetch_assoc($resultCount)['total'];
+$totalPages = ceil($rowCount / $itemsPerPage);
 
 function weeklyLogUpToDate($con) {
     // Get the current week number
@@ -37,22 +54,21 @@ function weeklyLogUpToDate($con) {
 
 ?>
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="icon" href="images/favicon.png">
-    <title>Login/Sign Up</title>
-
+    <script src="https://kit.fontawesome.com/877d2cecdc.js" crossorigin="anonymous"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
       rel="stylesheet"/>
-
     <!-- CSS FILES START -->
     <link href="css/custom3.css" rel="stylesheet">
     <link href="css/color.css" rel="stylesheet">
@@ -60,15 +76,13 @@ function weeklyLogUpToDate($con) {
     <link href="css/responsive.css" rel="stylesheet">
     <link href="css/owl.carousel.min.css" rel="stylesheet">
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/prettyPhoto.css" rel="stylesheet">
     <link href="css/all.min.css" rel="stylesheet">
     <link href="css/login.css" rel="stylesheet">
     <!-- CSS FILES End -->
 </head>
 <body>
-    <div class="wrapper home2">
-        <!--Header Start-->
-      <header class="header-style-2">
+    <!--Header Start-->
+    <header class="header-style-2">
          <nav class="navbar navbar-expand-lg">
                <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
@@ -95,9 +109,6 @@ function weeklyLogUpToDate($con) {
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
                        </li>
                        <?php endif; ?>
                   </ul>
@@ -185,132 +196,130 @@ function weeklyLogUpToDate($con) {
          
       </header>
       <!-- Header End -->
-        <!--Inner Header Start-->
-        <section class="wf100 inner-header">
-            <div class="container">
-               <h1>Account </h1>
 
-            
+      <!--Inner Header Start-->
+      <section class="wf100 inner-header">
+            <div class="container">
+               <h1>Educational Content</h1>
+            </div>
          </section>
          <!--Inner Header End--> 
 
-        <!--Content Start-->
-        <section class="wf100 p80">
-            
-           <div class="container">
-            
-              <div class="row">
-                
-                 <div class="col-lg-8">
-                    <div class="myaccount-form">
-                       <h3>Create Account</h3>
-                       <form method="post" action="accounts.php">
-                           <ul class="row">
-                              <li class="col-md-6">
-                                    <div class="input-group">
-                                       <input type="text" name="firstName" class="form-control" placeholder="First Name" required>
-                                    </div>
-                              </li>
-                              <li class="col-md-6">
-                                    <div class="input-group">
-                                       <input type="text" name="lastName" class="form-control" placeholder="Last Name" required>
-                                    </div>
-                              </li>
-                              <li class="col-md-6">
-                                    <div class="input-group">
-                                       <input type="text" name="username" class="form-control" placeholder="Username" required>
-                                    </div>
-                              </li>
-                              <li class="col-md-6">
-                                    <div class="input-group">
-                                       <input type="text" name="contactNumber" class="form-control" placeholder="Contact Number" required>
-                                    </div>
-                              </li>
-                              <li class="col-md-6">
-                                    <div class="input-group">
-                                       <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-                                    </div>
-                              </li>
-                              <li class="col-md-12">
-                                    <div class="input-group form-check">
-                                       <input type="checkbox" class="form-check-input" id="agreeTerms" required>
-                                       <label class="form-check-label" for="agreeTerms">I agree to the <a href="#">Terms of Services & Privacy Policy</a></label>
-                                    </div>
-                              </li>
-                              <li class="col-md-12">
-                                    <button type="submit" class="register" name="signup-btn">Create Account</button>
-                              </li>
-                           </ul>
-                        </form>
+<div class="wrapper">
+        <?php
 
-                    </div>
-                 </div>
-                 <div class="col-lg-4">
-                    <div class="login-box">
-                       <h3>Login Account</h3>
-                       <form method="post" action="accounts.php">
-                          <div class="input-group">
-                             <input type="text" class="form-control"  name="username"placeholder="Username" required>
-                          </div>
-                          <div class="input-group">
-                             <input type="password" class="form-control"  name="password" placeholder="Password" required>
-                          </div>
-                          <div class="container">
-                            <?php
-                            if(isset($_GET['alert']) && $_GET['alert'] == 'wrong_password') {
-                                echo <<<alert
-                                <div class="alert alert-danger alert-dismissible text-center" id="alert-msg" role="alert">
-                                    <strong>Incorrect password. Please try again</strong>
-                                </div>
-                                alert;
-                            }
-                            ?>
+        if ($result) {
+            echo '<section class="wf100 p80-40 blog" style="padding-bottom:0px;">';
+            echo '<div class="causes-grid">';
+            echo '<div class="container">';
+            echo '<div class="row">';
+
+            while ($row = mysqli_fetch_assoc($result)) {
+              echo '<div class="col-md-4 col-sm-6">';
+              echo '<!-- campaign box start -->';
+              echo '<div class="campaign-box" style="box-shadow: 0 10px 40px rgba(156,204,101,.35);height:440px; overflow:hidden;">';
+              echo '<div class="campaign-thumb"> <a href="#" data-toggle="modal" data-target="#contentModal" 
+                                                  data-title="' . htmlspecialchars($row['title']) . '" 
+                                                  data-image="' . htmlspecialchars($fetch_src . $row['content']) . '" 
+                                                  data-description="' . htmlspecialchars($row['description']) . '"><i class="fas fa-link"></i></a>';
+              echo '<div class="image-container" style="width: 100%; height: 200px; overflow: hidden;">';
+              echo '<img src="' . $fetch_src . $row['content'] . '" alt="" style="width: 100%; height: 100%; object-fit: cover;">';
+              echo '</div>';
+              echo '</div>';
+              echo '<div class="campaign-txt" style="padding-top:15px;">';
+              echo '<h6 style="height:40px;">' . $row['title'] . '</a></h6>';
+              echo '<p style="margin-bottom:0px;">' . truncateText($row['description'], 100) . '</p>'; //style="height:40px; padding-top:3px;"
+              echo '<br>';
+              // Add data attributes to the "View More" link for modal
+              echo '<a href="#" class="dbutton" data-toggle="modal" data-target="#contentModal" 
+                      data-title="' . htmlspecialchars($row['title']) . '" 
+                      data-image="' . htmlspecialchars($fetch_src . $row['content']) . '" 
+                      data-description="' . htmlspecialchars($row['description']) . '">View More</a>';
+              echo '</div>';
+              echo '</div>';
+              echo '</div>';
+          }
+          
+            echo '</div>';
+            echo '</div>';
+            echo '</div>';
+            echo '</section>';
+        } 
+        else {
+            echo "Error retrieving data: " . mysqli_error($con);
+        }
+         
+        // Function to truncate text
+        function truncateText($text, $maxLength) {
+          if (strlen($text) > $maxLength) {
+              $text = substr($text, 0, $maxLength) . '...';
+          }
+          return $text;
+      }
+
+      // Pagination navigation
+      echo '<div class="pagination-container">'; 
+      echo '<div class="col-md-12">';
+      echo '<div class="gt-pagination mt20">';
+      echo '<nav style="margin-bottom: 30px;">';
+      echo '<ul class="pagination">';
+
+      if ($totalPages > 1) {
+          if ($page > 1) {
+              echo '<li class="page-item"> <a class="page-link" href="?page=' . ($page - 1) . '" aria-label="Previous"> <i class="fas fa-angle-left"></i> </a> </li>';
+          }
+
+          for ($i = 1; $i <= $totalPages; $i++) {
+              if ($i == $page) {
+                  echo '<li class="page-item active"><span class="page-link">' . $i . '</span></li>';
+              } else {
+                  echo '<li class="page-item"><a class="page-link" href="?page=' . $i . '">' . $i . '</a></li>';
+              }
+          }
+
+          if ($page < $totalPages) {
+              echo '<li class="page-item"> <a class="page-link" href="?page=' . ($page + 1) . '" aria-label="Next"> <i class="fas fa-angle-right"></i> </a> </li>';
+          }
+      }
+
+      echo '</ul>';
+      echo '</nav>';
+      echo '</div>';
+      echo '</div>';
+      echo '</div>';
+      ?>
+    <!-- Modal Start -->
+    <div class="modal fade" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="contentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contentModalLabel"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Move image to the top -->
+                            <img src="" class="img-fluid" id="contentModalImage">
                         </div>
-
-                          <div class="input-group form-check">
-                             <input type="checkbox" class="form-check-input" id="exampleCheck2">
-                             <label class="form-check-label" for="exampleCheck2">Remember Me</label>
-                             <a href="#" class="fp">Forgot Password</a> 
-                          </div>
-                          <div class="input-group">
-                             <button class="login-btn" name="login-btn">Login</button>
-                          </div>
-                       </form>
                     </div>
-                 </div>
-              </div>
-           </div>
-        </section>
-        <!-- Content End--> 
-
-        <!-- Create Account Popup message -->
-        <div id="popupMessage" class="modal" style="display: none;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Registration Successful!</h4>
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <p>A default password has been sent to your email. Please check your inbox and login using the provided password.</p>
-                    </div>
-
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- Move description to the bottom -->
+                            <p id="contentModalDescription"></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Modal End -->
+    </div>
 
-   </div>
-   <div>
-      
-   <!-- Footer section -->
-   <div class="ftco-section wf100">
+    <div class="ftco-section wf100">
             <footer class="footer">
               <svg class="footer-wave-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100" preserveAspectRatio="none">
                 <path class="footer-wave-path" d="M851.8,100c125,0,288.3-45,348.2-64V0H0v44c3.7-1,7.3-1.9,11-2.9C80.7,22,151.7,10.8,223.5,6.3C276.7,2.9,330,4,383,9.8 c52.2,5.7,103.3,16.2,153.4,32.8C623.9,71.3,726.8,100,851.8,100z"></path>
@@ -381,31 +390,37 @@ function weeklyLogUpToDate($con) {
                    </div>
                </div>
            </footer>
-  </div>
+</footer>
+</div> 
 
-    <!--   JS Files Start  --> 
-    <script src="js/jquery-3.3.1.min.js"></script> 
-    <script src="js/jquery-migrate-1.4.1.min.js"></script> 
-    <script src="js/popper.min.js"></script> 
-    <script src="js/bootstrap.min.js"></script> 
-    <script src="js/owl.carousel.min.js"></script> 
-    <script src="js/jquery.prettyPhoto.js"></script> 
-    <script src="js/isotope.min.js"></script> 
+    <!-- JS Files Start -->
+    <!-- Include your existing JS script links -->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/jquery-migrate-1.4.1.min.js"></script>
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.prettyPhoto.js"></script>
+    <script src="js/isotope.min.js"></script>
     <script src="js/main.js"></script>
 
+    <!-- Add the new script for the modal -->
     <script>
-        // Check if the success message session variable is set
-        <?php if (isset($_SESSION['success_message'])): ?>
-            // Call the function to display the popup message
-            showSuccessMessage();
-        <?php endif; ?>
+        $(document).ready(function () {
+            $('#contentModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var title = button.data('title');
+                var content = button.data('image');
+                var description = button.data('description');
 
-        // Function to display the pop-up message
-        function showSuccessMessage() {
-            $('#popupMessage').modal('show'); // Assuming you are using Bootstrap modal
-        }
+                var modal = $(this);
+                modal.find('.modal-title').text(title);
+                modal.find('#contentModalImage').attr('src', content);
+                modal.find('#contentModalDescription').text(description);
+            });
+        });
     </script>
-
+    <!-- JS Files End -->
 </body>
-</html>
 
+</html>

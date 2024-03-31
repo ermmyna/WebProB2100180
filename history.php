@@ -16,8 +16,9 @@ function isLoggedIn()
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Get the current month and week
-$currentMonth = date('F'); // Full month name, e.g., January
+// SELECTED MONTH AND WEEK
+// Define current month and week
+$currentMonth = date('F'); // Current month
 $currentWeek = 'Week ' . ceil(date('j') / 7); // Calculate the week based on the current day
 
 // Function to fetch months for which the user has data
@@ -40,77 +41,6 @@ function getWeeksWithData($userID, $selectedMonth, $con) {
         $weeks[] = 'Week ' . $row['weekNo'];
     }
     return $weeks;
-}
-
-
-// Initialize arrays to store data for the line chart
-$months = [];
-$transportData = [];
-$foodData = [];
-$energyData = [];
-
-
-// Fetch data from the database only for the logged-in user
-if (isLoggedIn()) {
-    $userID = $_SESSION['userID'];
-    
-    $sql = "SELECT
-                MONTH(date) AS month,
-                SUM(CASE WHEN userID = $userID THEN carbonFootprintTransport ELSE 0 END) AS carbonFootprintTransport,
-                SUM(CASE WHEN userID = $userID THEN carbonFootprintFood ELSE 0 END) AS carbonFootprintFood,
-                SUM(CASE WHEN userID = $userID THEN carbonFootprintEnergy ELSE 0 END) AS carbonFootprintEnergy
-            FROM weeklyLog
-            WHERE userID = $userID
-            GROUP BY MONTH(date)";
-    
-    $result = mysqli_query($con, $sql);
-
-    // Fetch and format data for the line chart
-    while ($row = mysqli_fetch_assoc($result)) {
-        // Get the month number
-        $monthNumber = $row['month'];
-        
-        // If any of the carbon footprint data is non-zero, include the month in the chart
-        if ($row['carbonFootprintTransport'] != 0 || $row['carbonFootprintFood'] != 0 || $row['carbonFootprintEnergy'] != 0) {
-            // Get the month name from the numeric month value
-            $monthName = date("F", mktime(0, 0, 0, $monthNumber, 1));
-            
-            // Store the month name instead of the numeric value
-            $months[] = $monthName;
-            
-            // Store the carbon footprint data
-            $transportData[] = $row['carbonFootprintTransport'];
-            $foodData[] = $row['carbonFootprintFood'];
-            $energyData[] = $row['carbonFootprintEnergy'];
-        }
-    }
-
-    // Initialize an array to store carbon footprint data for all months
-    $allMonthsData = [];
-
-    // Fetch data for all months
-    $sqlAllMonths = "SELECT
-                        MONTH(date) AS month,
-                        SUM(CASE WHEN userID = $userID THEN totalCarbonFootprint ELSE 0 END) AS totalCarbonFootprint
-                    FROM weeklyLog
-                    WHERE userID = $userID
-                    GROUP BY MONTH(date)";
-
-    $resultAllMonths = mysqli_query($con, $sqlAllMonths);
-
-    // Fetch and format data for all months
-    while ($rowAllMonths = mysqli_fetch_assoc($resultAllMonths)) {
-        // Get the month number
-        $monthNumberAllMonths = $rowAllMonths['month'];
-        
-        // Calculate the total carbon footprint for the month
-        $allMonthsData[$monthNumberAllMonths] = $rowAllMonths['totalCarbonFootprint'];
-        
-    }
-} else {
-    // Handle case when user is not logged in
-    // You may redirect the user to the login page or show a message
-    echo "User not logged in";
 }
 ?>
 
@@ -287,17 +217,14 @@ if (isLoggedIn()) {
 <body>
     <div class="wrapper home2">
         <!--Header Start-->
-        <header class="header-style-2">
-            <nav class="navbar navbar-expand-lg">
-                <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item">
+      <header class="header-style-2">
+         <nav class="navbar navbar-expand-lg">
+               <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
+               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <i class="fas fa-bars"></i> </button>
+               <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="navbar-nav mr-auto">
+                     <li class="nav-item">
                            <a class="nav-link active" href="index.php">Home</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="#about">About</a>
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="events.php">Events</a>
@@ -309,7 +236,7 @@ if (isLoggedIn()) {
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="#">Learn</a>
+                           <a class="nav-link" href="display4.php">Learn</a>
                        </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
@@ -318,80 +245,92 @@ if (isLoggedIn()) {
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
                        </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
-                       </li>
                        <?php endif; ?>
-                    </ul>
-                    <?php if (isLoggedIn()): ?>
-                        <!-- If user is logged in, show profile circle -->
-                        <li class="nav-item" style="list-style: none;">
-                        <!-- If user is not logged in, show login button -->
-                        <div class="notification" >
-                            <div class="notBtn" href="#">
-                            <?php if (weeklyLogUpToDate($con)) : ?>
-                                <div class="number"></div>
-                            <?php else : ?>
-                                <div class="number">1</div>
-                            <?php endif; ?>
-                                <i class="fas fa-bell" id="bell"></i>
-                                <div class="box">
-                                    <div class="display">
-                                        <?php if (weeklyLogUpToDate($con)) : ?>
-                                        <div class="container" style= "padding-top:25px;">
-                                            <div class="row">
-                                                <div class="col-3">
-                                                <img class="icon" style="width:60px; margin-left:8px;" src="https://cdn-icons-png.flaticon.com/128/8832/8832119.png" alt="Update Weekly Log Icon">
-                                                </div>
-                                                <div class="col-8">
-                                                <div class="cent">You're all caught up!</div>
-                                                </div>
+                  </ul>
+                  <?php if (isLoggedIn()): ?>
+                     <!-- If user is logged in, show profile circle -->
+                     <li class="nav-item" style="list-style: none;">
+                     <!-- If user is not logged in, show login button -->
+                     <div class="notification" >
+                        <div class="notBtn" href="#">
+                           <?php if (weeklyLogUpToDate($con)) : ?>
+                              <div class="number"></div>
+                           <?php else : ?>
+                              <div class="number">1</div>
+                           <?php endif; ?>
+                              <i class="fas fa-bell" id="bell"></i>
+                              <div class="box">
+                                 <div class="display">
+                                    <?php if (weeklyLogUpToDate($con)) : ?>
+                                       <div class="container" style= "padding-top:25px;">
+                                          <div class="row">
+                                             <div class="col-3">
+                                             <img class="icon" style="width:60px; margin-left:8px;" src="https://cdn-icons-png.flaticon.com/128/8832/8832119.png" alt="Update Weekly Log Icon">
+                                             </div>
+                                             <div class="col-8">
+                                             <div class="cent">You're all caught up!</div>
                                             </div>
-                                        <?php else : ?>
-                                        <div class="container" style= "padding-top:22px;">
-                                            <div class="row">
-                                                <div class="col-3">
-                                                    <img class="icon" style="width:50px;" src="https://cdn-icons-png.flaticon.com/128/10308/10308693.png" alt="Update Weekly Log Icon">
-                                                </div>
-                                                <div class="col-8">
-                                                    <div class="cent">Please update your weekly log for this week</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <?php endif; ?>
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="nav-item profile-dropdown">
-                            <img src="images/profile.jpg" class="profile" />
-                            <ul class="profile-menu">
-                            <li class="sub-item">
-                                <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
-                                    <span class="material-icons-outlined"> manage_accounts </span>
-                                    <p>Update Profile</p>
-                                </a>
-                            </li>
-                            <!-- Other profile-related items -->
-                            <li class="sub-item">
-                                    <a href="index.php?logout=true" style="display: flex; align-items: center; text-decoration: none;"> <!-- Log out link -->
-                                        <span class="material-icons-outlined"> logout </span>
-                                        <p>Logout</p>
-                                    </a>
-                            </li>
-                            </ul>
-                        </li>
+                                          </div>
+                                    <?php else : ?>
+                                       <div class="container" style= "padding-top:22px;">
+                                          <div class="row">
+                                             <div class="col-3">
+                                                   <img class="icon" style="width:50px;" src="https://cdn-icons-png.flaticon.com/128/10308/10308693.png" alt="Update Weekly Log Icon">
+                                             </div>
+                                             <div class="col-8">
+                                                   <div class="cent">Please update your weekly log for this week</div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    <?php endif; ?>
+                                 </div>
+                              </div>
+                              </div>
+                        </div>
+                     </li>
+                     <li class="nav-item profile-dropdown">
+                        <img src="images/profile.jpg" class="profile" />
+                        <ul class="profile-menu">
+                           <li class="sub-item">
+                               <a href="socialInt(chat).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Chat Room</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
+                               <a href="socialInt(shareAchivement).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Share Achievements</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
+                               <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Update Profile</p>
+                               </a>
+                           </li>
+                           <!-- Other profile-related items -->
+                           <li class="sub-item">
+                                 <a href="index.php?logout=true" style="display: flex; align-items: center; text-decoration: none;"> <!-- Log out link -->
+                                    <span class="material-icons-outlined"> logout </span>
+                                    <p>Logout</p>
+                                 </a>
+                           </li>
+                        </ul>
+                     </li>
 
-                    <?php else: ?>
-                            <li class="nav-item" style="list-style: none;">
-                            <a class="login-btn" href="login.php" role="button"> Login </a>
-                            </li>
-                    <?php endif; ?>
-                </div>
-            </nav>
-        </header>
-        <!-- Header End -->
+               <?php else: ?>
+                     <li class="nav-item" style="list-style: none;">
+                        <a class="login-btn" href="login.php" role="button"> Login </a>
+                     </li>
+               <?php endif; ?>
+               
+         </div>
+         
+         </nav>
+         
+      </header>
+      <!-- Header End -->
         <!--Inner Header Start-->
         <section class="wf100 inner-header">
             <div class="container">
@@ -565,58 +504,6 @@ if (isLoggedIn()) {
         </div>
     </div>
 
-    <!-- JavaScript for fetching data based on selected month and week -->
-    <script>
-        $(document).ready(function () {
-            // Trigger AJAX request when page loads to fetch data for the current week
-            fetchData();
-
-            // Event listener for change in month and week selection
-            $('select[name="month"], select[name="week"]').change(function () {
-                // Trigger AJAX request when month or week selection changes
-                fetchData();
-            });
-
-            // Event listener for "Show Activity" button click
-            $('#showActivityBtn').click(function () {
-                // Trigger AJAX request when "Show Activity" button is clicked
-                fetchData();
-            });
-
-            // Function to fetch data based on selected month and week
-            function fetchData() {
-                var selectedMonth = $('select[name="month"]').val();
-                var selectedWeek = $('select[name="week"]').val();
-
-                // AJAX request to fetch data for the selected month and week
-                $.ajax({
-                    url: 'fetch_history.php',
-                    type: 'POST',
-                    data: {
-                        selectedMonth: selectedMonth,
-                        selectedWeek: selectedWeek
-                    },
-                    dataType: 'json',
-                    success: function (response) {
-                        // Update card elements with fetched data
-                        $('#foodData').html(number_format(response.carbonFootprintFood, 2) + '<span class="text-sm">kgCO2e</span>');
-                        $('#energyData').html(number_format(response.carbonFootprintEnergy, 2) + '<span class="text-sm">kgCO2e</span>');
-                        $('#transportData').html(number_format(response.carbonFootprintTransport, 2) + '<span class="text-sm">kgCO2e</span>');
-                        $('#totalFootprintData').html(number_format(response.totalCarbonFootprint, 2) + '<span class="text-sm">kgCO2e</span>');
-                    },
-                    error: function () {
-                        // Handle error
-                        alert('Failed to fetch data. Please try again.');
-                    }
-                });
-            }
-
-            // Function to format number with commas for thousands separator
-            function number_format(number, decimals) {
-                return parseFloat(number).toFixed(decimals).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-        });
-    </script>
 
     <!-- Carbon Footprint Cards -->
     <div class="container flex items-center justify-center p-5">
@@ -659,41 +546,51 @@ if (isLoggedIn()) {
 
     <!-- JavaScript for fetching data for cards based on selected month and week -->
     <script>
-        // Event listener for change in month and week selection
-        $('select[name="month"], select[name="week"]').change(function () {
-            var selectedMonth = $('select[name="month"]').val();
-            var selectedWeek = $('select[name="week"]').val();
-            
-            // AJAX request to fetch data for the selected month and week
-            $.ajax({
-                url: 'fetch_history.php',
-                type: 'POST',
-                data: {
-                    selectedMonth: selectedMonth,
-                    selectedWeek: selectedWeek
-                },
-                dataType: 'json',
-                success: function (response) {
-                    // Update card elements with fetched data
-                    $('#foodData').html(number_format(response.carbonFootprintFood, 2) + '<span class="text-sm">kgCO2e</span>');
-                    $('#energyData').html(number_format(response.carbonFootprintEnergy, 2) + '<span class="text-sm">kgCO2e</span>');
-                    $('#transportData').html(number_format(response.carbonFootprintTransport, 2) + '<span class="text-sm">kgCO2e</span>');
-                    $('#totalFootprintData').html(number_format(response.totalCarbonFootprint, 2) + '<span class="text-sm">kgCO2e</span>');
-                },
-                error: function () {
-                    // Handle error
-                    alert('Failed to fetch data. Please try again.');
-                }
+        $(document).ready(function () {
+            // Fetch data when page loads with default values
+            fetchData();
+
+            // Event listener for "Show Activity" button click
+            $('#showActivityBtn').click(function () {
+                // Fetch data when "Show Activity" button is clicked
+                fetchData();
             });
+
+            // Function to fetch data based on selected month and week
+            function fetchData() {
+                var selectedMonth = $('select[name="month"]').val();
+                var selectedWeek = $('select[name="week"]').val();
+
+                // AJAX request to fetch data for the selected month and week
+                $.ajax({
+                    url: 'fetch_history.php',
+                    type: 'POST',
+                    data: {
+                        selectedMonth: selectedMonth,
+                        selectedWeek: selectedWeek
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        // Update card elements with fetched data
+                        $('#foodData').html(number_format(response.carbonFootprintFood, 2) + '<span class="text-sm">kgCO2e</span>');
+                        $('#energyData').html(number_format(response.carbonFootprintEnergy, 2) + '<span class="text-sm">kgCO2e</span>');
+                        $('#transportData').html(number_format(response.carbonFootprintTransport, 2) + '<span class="text-sm">kgCO2e</span>');
+                        $('#totalFootprintData').html(number_format(response.totalCarbonFootprint, 2) + '<span class="text-sm">kgCO2e</span>');
+                    },
+                    error: function () {
+                        // Handle error
+                        alert('Failed to fetch data. Please try again.');
+                    }
+                });
+            }
+
+            // Function to format number with commas for thousands separator
+            function number_format(number, decimals) {
+                return parseFloat(number).toFixed(decimals).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
         });
 
-        // Function to format number with commas for thousands separator
-        function number_format(number, decimals) {
-            return parseFloat(number).toFixed(decimals).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
     </script>
-
-       
 
        <div class="container mt-9">
             <div class="row">
@@ -716,6 +613,37 @@ if (isLoggedIn()) {
                 </div>
             </div>
         </div>
+
+        <script>
+            $(document).ready(function() {
+                // Event listener for month dropdown change
+                $('select[name="month"]').change(function() {
+                    var selectedMonth = $(this).val();
+                    // Fetch weeks for the selected month via AJAX
+                    $.ajax({
+                        url: "fetch_history2.php",
+                        method: "POST",
+                        dataType: "json",
+                        data: { selectedMonth: selectedMonth },
+                        success: function(response) {
+                            // Sort the weeks array in ascending order
+                            response.weeks.sort();
+
+                            // Update week dropdown options
+                            $('select[name="week"]').empty();
+                            $.each(response.weeks, function(index, week) {
+                                $('select[name="week"]').append('<option value="' + week + '">' + week + '</option>');
+                            });
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("AJAX Error: " + status, error);
+                        }
+                    });
+                });
+            });
+            
+        </script>
+        
         <script>
             // Get the carbon footprint data from PHP
             var transportationData = <?php echo $carbonFootprintData['transport']; ?>;
