@@ -40,8 +40,8 @@
             margin-left: -375px; /* Move image to the left side*/
         }
         .medium-image1 {
-            width: 130%; /* Adjust the width as needed */
-            height: 220px; /* Allow the height to adjust automatically */
+            width: 100%; /* Adjust the width as needed */
+            height: 200px; /* Allow the height to adjust automatically */
             margin-top: 90px; /* Adjust the margin-top */
             margin-bottom: 90px; /* Add margin below the image */
             margin-left: -180px; /* Move image to the left side*/
@@ -94,84 +94,36 @@
             <img src="images/EcoTrace Logo.png" alt="" class="medium-image"> <!-- Place the logo on the left side -->
         </div>
         <div class="center-image">
-            <img src="images/eg2.jpg" alt="" class="medium-image1"> <!-- Place the image in the center -->
+            <img src="images/current-pro8.jpg" alt="" class="medium-image1"> <!-- Place the image in the center -->
         </div>
         <div class="registration-form">
-            <h2>Edit Event 2</h2>
+            <h2>Add Event</h2>
             <br>
-            <form id="editEventForm" action="update_event.php" method="POST">
+            <form id="addEventForm" action="insertEvent.php" method="POST">
                 <!-- Include a hidden input field to pass the event ID -->
-                <input type="hidden" id="eventId" name="eventId" value="2"> <!-- Replace "2" with the actual event ID -->
+                <input type="hidden" id="eventId" name="eventId" value="8"> <!-- Replace "6" with the actual event ID -->
         
                 <label for="eventName">Event Name:</label><br>
-                <input type="text" id="eventName" name="eventName" value="Every Action Counts: Join for Our Future" style="width: 350px;" required>
+                <input type="text" id="eventName" name="eventName" style="width: 350px;" required>
                 <br>
                 <br>
                 <label for="organizers">Organizers:</label><br>
-                <input type="text" id="organizers" name="organizers" value="Universiti Putra Malaysia (Faculty of Agriculture)" style="width: 350px;" required>
+                <input type="text" id="organizers" name="organizers" style="width: 350px;" required>
                 <br>
                 <br>
                 <label for="date">Date:</label><br>
-                <input type="date" id="date" name="date" value="2024-04-30" style="width: 350px;" required>
+                <input type="date" id="date" name="date" style="width: 350px;" required>
                 <br>
                 <br>
                 <label for="time">Time:</label><br>
-                <input type="text" id="time" name="time" value="9:00 am - 1:00 pm" style="width: 350px;" required>
+                <input type="text" id="time" name="time" style="width: 350px;" required>
                 <br>
                 <br>
-                <input type="submit" value="Update" onclick="updateEvent();">
+                <input type="submit" value="Add">
 
             </form>
         </div>
     </div>
-    
-    <script>
-    function updateEvent() {
-        // Get updated event details from the form
-        const updatedEvent = {
-            eventId: document.getElementById('eventId').value,
-            eventName: document.getElementById('eventName').value,
-            organizers: document.getElementById('organizers').value,
-            date: document.getElementById('date').value,
-            time: document.getElementById('time').value
-        };
-
-        // Store updated event details in localStorage
-        localStorage.setItem('updatedEvent', JSON.stringify(updatedEvent));
-
-        // Remove previous event details from the DOM
-        const eventPostToRemove = document.getElementById('event' + updatedEvent.eventId);
-        if (eventPostToRemove) {
-            eventPostToRemove.remove();
-        }
-
-        // Redirect back to events.php
-        window.location.href = 'events.php';
-    }
-</script>
-
-    <script>
-        // Function to format date to "Month day, year" format
-        function formatDate(dateString) {
-            // Create a new Date object from the input string
-            const date = new Date(dateString);
-
-            // Get the month name using an array of month names
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-            const monthIndex = date.getMonth();
-            const monthName = monthNames[monthIndex];
-
-            // Get the day of the month
-            const day = date.getDate();
-
-            // Get the year
-            const year = date.getFullYear();
-
-            // Construct the formatted date string
-            return `${monthName} ${day}, ${year}`;
-        }
-
-    </script>
     
 </body>
 </html>

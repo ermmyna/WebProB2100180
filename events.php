@@ -23,6 +23,14 @@
     height: 125px; /* Adjust as needed */
     margin-top: -22px; /* Adjust as needed */
 }
+.logo-img {
+    height: 115px; /* Adjust as needed */
+    margin-right: -10px; /* Adjust as needed */
+}
+
+footer{
+    background-color: green;
+}
 
 header h1 {
     font-size: 28px;
@@ -49,8 +57,12 @@ nav a {
     </div>
         <h1>Upcoming Events</h1>
         <!-- Navigation link for home page -->
+        <br>
         <nav>
             <a href="index.php">Home</a>
+        </nav>
+        <nav>
+            <a href="addEvent.php">Add Event</a>
         </nav>
     </header>
             
@@ -94,16 +106,64 @@ nav a {
                            <img src="images/eg1.jpg" alt="">
                        </div>
                        <div class="event-txt">
-                       <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Awareness Campaign to Save & Planting Forest</a></h5>
+                       <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Awareness Campaign to Save Forest</a></h5>
                        <br>    
-                       <ul class="etime">
-                               <li style="color: black;"><a href="#" style="color: black; text-decoration: none;"><strong>Organizers:</strong>Universiti Malaya (Institute of Biological Sciences)</li>
-                               <br>
-                               <li style="color: black;"><a href="#" style="color: black; text-decoration: none;"><strong>Date:</strong> 2 April, 2024</li>
-                               <br>
-                               <li style="color: black;"><a href="#" style="color: black; text-decoration: none;"><strong>Time:</strong> 9:00 am - 12:30 pm</li>
-                           </ul>
-                           <br>
+                       <br>
+
+                       <?php
+// Initialize variables
+$eventName = '';
+$organizers = '';
+$date = '';
+$time = '';
+
+// Connect to your database
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$dbname = "bit210";
+
+// Attempt to establish a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Prepare and execute the SQL query to fetch the updated event details
+$selectSql = "SELECT eventName, organizers, date, time FROM events WHERE eventId = 1"; // Change the eventId as needed
+$result = $conn->query($selectSql);
+
+// Check if the query executed successfully
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Check if at least one row is returned
+if ($result->num_rows > 0) {
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    // Assign values to variables
+    $eventName = $row['eventName'];
+    $organizers = $row['organizers'];
+    $date = $row['date'];
+    $time = $row['time'];
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+<ul class="etime">
+    <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+    <br>
+    <li><strong>Date: <?php echo $date; ?></strong></li>
+    <br>
+    <li><strong>Time: <?php echo $time; ?></strong></li>
+    <br>
+</ul>
            <!-- Edit and Delete Buttons -->
            <div style="text-align: center;" class="edit-delete-buttons">
            <button onclick="editEvent(1)">Edit</button>
@@ -129,6 +189,10 @@ function editEvent1(eventId) {
                    </div>
                   </div>
                     <!--Blog Post End--> 
+                    
+                    <?php
+
+?>
 
 <!--Blog Post Start-->
 <div class="col-lg-4 col-md-30 april">
@@ -137,22 +201,69 @@ function editEvent1(eventId) {
            <img src="images/eg2.jpg" alt="">
        </div>
        <div class="event-txt">
-           <h5 style="color: white;"><a href="#" style="color: black; text-decoration: none;">Every Action Counts: Join for Our Future</a></h5>
-           <br>
-           <ul class="etime">
-           <li style="color: black;"><a href="#" style="color: black; text-decoration: none;"><strong>Organizers: Universiti Putra Malaysia</strong> <?php echo $_POST['organizers']; ?></li>
-            <br>
-            <li><strong>Date: 23/4/2024</strong> <br>"Changed to:" <?php echo $_POST['date']; ?></li>
-            <br>
-            <li><strong>Time:9:00am - 1:00 pm <br>"Changed to:"</strong> <?php echo $_POST['time']; ?></li>   
-           </ul>
-           <br>
+    <h5 style="color: white;"><a href="#" style="color: black; text-decoration: none;">Every Action Counts: Join for Our Future</a></h5>
+    <br>
+
+    <?php
+// Initialize variables
+$eventName = '';
+$organizers = '';
+$date = '';
+$time = '';
+
+// Connect to your database
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$dbname = "bit210";
+
+// Attempt to establish a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Prepare and execute the SQL query to fetch the updated event details
+$selectSql = "SELECT eventName, organizers, date, time FROM events WHERE eventId = 2"; // Change the eventId as needed
+$result = $conn->query($selectSql);
+
+// Check if the query executed successfully
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Check if at least one row is returned
+if ($result->num_rows > 0) {
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    // Assign values to variables
+    $eventName = $row['eventName'];
+    $organizers = $row['organizers'];
+    $date = $row['date'];
+    $time = $row['time'];
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+<ul class="etime">
+    <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+    <br>
+    <li><strong>Date: <?php echo $date; ?></strong></li>
+    <br>
+    <li><strong>Time: <?php echo $time; ?></strong></li>
+    <br>
+</ul>
            <!-- Edit and Delete Buttons -->
            <div style="text-align: center;" class="edit-delete-buttons">
             <button onclick="editEvent(2)">Edit</button> <!-- Assuming event ID is 2 -->
             <br>
                <br>
-               <button onclick="deleteEvent(2)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
+               <button onclick="confirmDelete(2)">Delete</button>
                
                <script>
 function editEvent(eventId) {
@@ -162,57 +273,63 @@ function editEvent(eventId) {
     window.location.href = url;
 
 }
-    function deleteEvent(eventId) {
-        // Call a JavaScript function to delete event with ID "1"
-        // Implement delete functionality here
+          </script>  
+          
+          <script>
+
+function confirmDelete(eventId) {
+    var confirmDelete = confirm('Are you sure you want to delete this event?');
+    if (confirmDelete) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'deleteEvent.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var eventToRemove = document.getElementById('event' + eventId);
+                    if (eventToRemove) {
+                        eventToRemove.remove();
+                        // Slide subsequent events left if the deleted event is event1, event2, or event3
+                        if (eventId === 1 || eventId === 2 || eventId === 3) {
+                            for (let i = eventId + 1; i <= 3; i++) {
+                                const currentEvent = document.getElementById('event' + i);
+                                if (currentEvent) {
+                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
+                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
+                                }
+                            }
+                        }
+                    } else {
+                        alert('Error: Event element not found.');
+                    }
+
+                    // Move event3 to the position of event2
+                    var event3 = document.getElementById('event3');
+                    var event2 = document.getElementById('event2');
+                    var event4 = document.getElementById('event4');
+                    if (event3 && event2 && event4) {
+                        event3.style.transition = "transform 0.5s ease-in-out";
+                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
+                        event4.style.transition = "transform 0.5s ease-in-out";
+                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
+                    }
+                } else {
+                    alert('Error deleting event.');
+                }
+            }
+        };
+        xhr.send('eventId=' + eventId);
     }
-    </script>
+}
+
+</script>
+    
             </div>
        </div>
    </div>
 </div>
 
 <!-- Include any JavaScript files -->
-
-<script>
-   function deleteEvent(eventId) {
-    // Remove the event post from the DOM based on the eventId
-    const eventPostToRemove = document.getElementById('event' + eventId);
-    if (eventPostToRemove) {
-        eventPostToRemove.remove();
-
-        // Slide subsequent events left if the deleted event is event1 or event2 or event3
-        if (eventId === 1 || eventId === 2 || eventId === 3) {
-            for (let i = eventId + 1; i <= 6; i++) {
-                const currentEventPost = document.getElementById('event' + i);
-                if (currentEventPost) {
-                    currentEventPost.style.transition = "transform 0.5s ease-in-out";
-                    currentEventPost.style.transform = "translateX(-100%)"; // Slide left
-                }
-            }
-        }
-        
-        // Position event4 beside event3 if the deleted event is event1 or event2
-        if (eventId === 1 || eventId === 2) {
-            const event4 = document.getElementById('event4');
-            const event3 = document.getElementById('event3');
-            if (event4 && event3) {
-                event4.style.transition = "transform 0.5s ease-in-out";
-                event4.style.transform = "translate(226%, -108%)"; // Beside event3
-            }
-        }
-        // Position event5 beside event4 if the deleted event is event1 or event3
-        if (eventId === 1 || eventId === 3) {
-            const event5 = document.getElementById('event5');
-            const event4 = document.getElementById('event4');
-            if (event5 && event4) {
-                event4.style.transition = "transform 0.5s ease-in-out";
-                event4.style.transform = "translate(224%, -108%)"; // Beside event4
-            }
-        }
-    }
-}
-          </script>
 
          <!--Blog Post End--> 
                      
@@ -222,29 +339,133 @@ function editEvent(eventId) {
                            <div class="event-thumb"> 
                               <img src="images/eg3.jpg" alt=""></div>
                            <div class="event-txt">
-                              <h5 style="color: white;"><a href="#" style="color: black; text-decoration: none;">Reimagine! Creative Solutions for Our Planet</a></h5>
-                              <ul class="etime">
-                                <br>
-                                 <li><strong>Organizers:</strong>The Habitat Foundation (Yayasan Habitat)</li>
-                                 <br>
-                                 <li><strong>Date:</strong> 5 May, 2024</li>
-                                 <br>
-                                 <li><strong>Time:</strong> 9:30 am - 12:00 pm</li>
-                              </ul>
-
+                              <h5 style="color: white;"><a href="#" style="color: black; text-decoration: none;">Reimagine! Creative Solutions for Our Country</a></h5>
                               <br>
+                              <?php
+// Initialize variables
+$eventName = '';
+$organizers = '';
+$date = '';
+$time = '';
+
+// Connect to your database
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$dbname = "bit210";
+
+// Attempt to establish a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Prepare and execute the SQL query to fetch the updated event details
+$selectSql = "SELECT eventName, organizers, date, time FROM events WHERE eventId = 3"; // Change the eventId as needed
+$result = $conn->query($selectSql);
+
+// Check if the query executed successfully
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Check if at least one row is returned
+if ($result->num_rows > 0) {
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    // Assign values to variables
+    $eventName = $row['eventName'];
+    $organizers = $row['organizers'];
+    $date = $row['date'];
+    $time = $row['time'];
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+<ul class="etime">
+    <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+    <br>
+    <li><strong>Date: <?php echo $date; ?></strong></li>
+    <br>
+    <li><strong>Time: <?php echo $time; ?></strong></li>
+    <br>
+</ul>
+
                                   <!-- Edit and Delete Buttons -->
                                  <div style="text-align: center;" class="edit-delete-buttons">
-                                  <button onclick="editEvent(3)">Edit</button> <!-- Assuming event ID is 1 -->
+                                  <button onclick="editEvent(3)">Edit</button> <!-- Assuming event ID is 3 -->
                                   <br>
                                      <br>
-                                     <button onclick="deleteEvent(3)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
-                                 </div>
+                                     <button onclick="confirmDelete(3)">Delete</button> <!-- Call a JavaScript function to delete event with ID "3" -->
+                                     
+                                     <script>
+function editEvent(eventId) {
+    // Construct the URL dynamically based on the event ID
+    var url = 'event' + eventId + '.php';
+    // Redirect to the dynamically generated URL
+    window.location.href = url;
+
+}
+</script>
+
+<script>
+
+function confirmDelete(eventId) {
+    var confirmDelete = confirm('Are you sure you want to delete this event?');
+    if (confirmDelete) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'deleteEvent.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var eventToRemove = document.getElementById('event' + eventId);
+                    if (eventToRemove) {
+                        eventToRemove.remove();
+                        // Slide subsequent events left if the deleted event is event1, event2, or event3
+                        if (eventId === 1 || eventId === 2 || eventId === 3) {
+                            for (let i = eventId + 1; i <= 3; i++) {
+                                const currentEvent = document.getElementById('event' + i);
+                                if (currentEvent) {
+                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
+                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
+                                }
+                            }
+                        }
+                    } else {
+                        alert('Error: Event element not found.');
+                    }
+
+                    // Move event3 to the position of event2
+                    var event3 = document.getElementById('event3');
+                    var event2 = document.getElementById('event2');
+                    var event4 = document.getElementById('event4');
+                    if (event3 && event2 && event4) {
+                        event3.style.transition = "transform 0.5s ease-in-out";
+                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
+                        event4.style.transition = "transform 0.5s ease-in-out";
+                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
+                    }
+                } else {
+                    alert('Error deleting event.');
+                }
+            }
+        };
+        xhr.send('eventId=' + eventId);
+    }
+}
+
+</script>
+                                    </div>
                               </div>
                               </div>
                      </div>
 
-                    
                      <!--Blog Post End-->
                      <!--Blog Post Start-->
                      <div class="col-lg-4 col-md-6 may">
@@ -252,22 +473,70 @@ function editEvent(eventId) {
                            <div class="event-thumb"> 
                               <img src="images/eg4.jpg" alt=""></div>
                            <div class="event-txt">
-                           <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Our Planet Needs You: Be the Change<Br> You Wish For</a></h5>
-                              <ul class="etime">
-                                <br>
-                                 <li><strong>Organizers:</strong>Malaysian Green Technology Corporation </li>
-                                 <br>
-                                 <li><strong>Date:</strong> 19 May, 2024</li>
-                                 <br>
-                                 <li><strong>Time:</strong> 10:30 am - 1:30 pm</li>
-                              </ul>
+                           <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Our Planet Needs You</a></h5>
+                           <br>
+
+                           <?php
+// Initialize variables
+$eventName = '';
+$organizers = '';
+$date = '';
+$time = '';
+
+// Connect to your database
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$dbname = "bit210";
+
+// Attempt to establish a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Prepare and execute the SQL query to fetch the updated event details
+$selectSql = "SELECT eventName, organizers, date, time FROM events WHERE eventId = 4"; // Change the eventId as needed
+$result = $conn->query($selectSql);
+
+// Check if the query executed successfully
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Check if at least one row is returned
+if ($result->num_rows > 0) {
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    // Assign values to variables
+    $eventName = $row['eventName'];
+    $organizers = $row['organizers'];
+    $date = $row['date'];
+    $time = $row['time'];
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+<ul class="etime">
+    <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+    <br>
+    <li><strong>Date: <?php echo $date; ?></strong></li>
+    <br>
+    <li><strong>Time: <?php echo $time; ?></strong></li>
+    <br>
+</ul>
                               <br>
                                   <!-- Edit and Delete Buttons -->
                                  <div style="text-align: center;" class="edit-delete-buttons">
-                                  <button onclick="editEvent(4)">Edit</button> <!-- Assuming event ID is 1 -->
+                                  <button onclick="editEvent(4)">Edit</button> <!-- Assuming event ID is 4 -->
                                   <br>
                                      <br>
-                                     <button onclick="deleteEvent(4)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
+                                     <button onclick="deleteEvent(4)">Delete</button> <!-- Call a JavaScript function to delete event with ID "4" -->
                                  <br><br><br>
                                     </div>
                               </div>
@@ -282,26 +551,149 @@ function editEvent(eventId) {
                            <div class="event-txt">
                            <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Save the Planet, Don't Let It Fizzle!</a>
                               </h5>
-                              <ul class="etime">
-                                <br><br>
-                              <li style="color: black;"><strong>Organizers:</strong> EcoFriend Malaysia</li>
                               <br>
-                              <li style="color: black;"><strong>Date:</strong> 12 June, 2024</li>
-                              <br>
-                              <li style="color: black;"><strong>Time:</strong> 9:30 am - 02:00 pm</li>
-                              </ul>
-                              <br><br>
+
+                              <?php
+// Initialize variables
+$eventName = '';
+$organizers = '';
+$date = '';
+$time = '';
+
+// Connect to your database
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$dbname = "bit210";
+
+// Attempt to establish a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Prepare and execute the SQL query to fetch the updated event details
+$selectSql = "SELECT eventName, organizers, date, time FROM events WHERE eventId = 5"; // Change the eventId as needed
+$result = $conn->query($selectSql);
+
+// Check if the query executed successfully
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Check if at least one row is returned
+if ($result->num_rows > 0) {
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    // Assign values to variables
+    $eventName = $row['eventName'];
+    $organizers = $row['organizers'];
+    $date = $row['date'];
+    $time = $row['time'];
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+<ul class="etime">
+    <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+    <br>
+    <li><strong>Date: <?php echo $date; ?></strong></li>
+    <br>
+    <li><strong>Time: <?php echo $time; ?></strong></li>
+    <br>
+</ul>
+<br>
+<br>
                                   <!-- Edit and Delete Buttons -->
                                  <div style="text-align: center;" class="edit-delete-buttons">
-                                  <button onclick="editEvent(5)">Edit</button> <!-- Assuming event ID is 1 -->
+                                  <button onclick="editEvent(5)">Edit</button> <!-- Assuming event ID is 5 -->
                                   <br>
                                      <br>
-                                     <button onclick="deleteEvent(5)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
+                                     <button onclick="deleteEvent(5)">Delete</button> <!-- Call a JavaScript function to delete event with ID "5" -->
                                  </div>
                            </div>
                         </div>
                      </div>
                      <br><br>
+
+                     <?php
+// Initialize variables
+$eventId = 7; // Assuming the event ID for the newly added event is 6
+$eventName = '';
+$organizers = '';
+$date = '';
+$time = '';
+
+// Connect to your database
+$servername = "localhost:3307";
+$username = "root";
+$password = "";
+$dbname = "bit210";
+
+// Attempt to establish a connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Prepare and execute the SQL query to fetch the updated event details
+$selectSql = "SELECT eventName, organizers, date, time FROM events WHERE eventId = $eventId";
+$result = $conn->query($selectSql);
+
+// Check if the query executed successfully
+if ($result === false) {
+    die("Error executing query: " . $conn->error);
+}
+
+// Check if at least one row is returned
+if ($result->num_rows > 0) {
+    // Fetch the row
+    $row = $result->fetch_assoc();
+    
+    // Assign values to variables
+    $eventName = $row['eventName'];
+    $organizers = $row['organizers'];
+    $date = $row['date'];
+    $time = $row['time'];
+}
+?>
+
+<div class="col-lg-4 col-md-6 june">
+    <div class="event-post" id="event<?php echo $eventId; ?>">
+        <div class="event-thumb">
+            <img src="images/eg6.jpg" alt="">
+        </div>
+        <div class="event-txt">
+            <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;"><?php echo $eventName; ?></a></h5>
+            <br>
+            <ul class="etime">
+                <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+                <br>
+                <li><strong>Date: <?php echo $date; ?></strong></li>
+                <br>
+                <li><strong>Time: <?php echo $time; ?></strong></li>
+                <br>
+            </ul>
+            <br>
+            <br>
+            <!-- Edit and Delete Buttons -->
+            <div style="text-align: center;" class="edit-delete-buttons">
+                <button onclick="editEvent(<?php echo $eventId; ?>)">Edit</button>
+                <br>
+                <br>
+                <button onclick="deleteEvent(<?php echo $eventId; ?>)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
                      <!-- Include any JavaScript files -->
                      <!--Blog Post End--> 
                      <!--Blog Post Start-->
@@ -370,6 +762,79 @@ function editEvent(eventId) {
         localStorage.removeItem('updatedEvent');
     }
 </script>
+
+ <!--Footer Section Start--> 
+ <div class="ftco-section wf100">
+            <footer class="footer">
+              </svg>
+            </section>
+            <footer class="footer-03">
+               <div class="container">
+                   <div class="row">
+                       <div class="col-md-6">
+                           <div class="d-flex align-items-center justify-content-between mb-4">
+                               
+                              <div class="logo-space">
+                                  <img src="images/EcoTrace Logo.png" alt="Eco Trace Logo" class="logo-img">
+                              </div>
+                          </div>
+              
+                           <div class="row">
+                               <div class="col-md-6 mb-md-0 mb-4">
+                                   <h2 class="footer-heading">Carbon Calculator</h2>
+                                   <ul class="list-unstyled">
+                                       <li><a href="#" class="py-1 d-block">How it Works</a></li>
+                                       <li><a href="#" class="py-1 d-block">Log Your Activities</a></li>
+                                       <li><a href="#" class="py-1 d-block">Reduce Your Footprint</a></li>
+                                   </ul>
+                               </div>
+                               <div class="col-md-4 mb-md-0 mb-4">
+                                   <h2 class="footer-heading">Resources</h2>
+                                   <ul class="list-unstyled">
+                                       <li><a href="#" class="py-1 d-block">Blog</a></li>
+                                       <li><a href="#" class="py-1 d-block">Educational Materials</a></li>
+                                       <li><a href="#" class="py-1 d-block">FAQs</a></li>
+                                   </ul>
+                               </div>
+                           </div>
+                       </div>
+                       <div class="col-md-6">
+                           <div class="row justify-content-end">
+                               <div class="col-md-12 col-lg-11 mb-md-0 mb-4">
+                                   
+                                   <h2 class="footer-heading mt-5">Connect With Us</h2>
+                                   <ul class="ftco-footer-social p-0">
+                                       <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Twitter"><i class="fab fa-twitter"></i></a></li>
+                                       <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Facebook"><i class="fab fa-facebook"></i></a></li>
+                                       <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="Instagram"><i class="fab fa-instagram"></i></a></li>
+                                       <li class="ftco-animate"><a href="#" data-toggle="tooltip" data-placement="top" title="LinkedIn"><i class="fab fa-linkedin"></i></a></li>
+                                   </ul>
+                                   <h2 class="footer-heading mt-5">Subscribe to Our Newsletter</h2>
+                                   <form action="#" class="subscribe-form">
+                                       <div class="form-group d-flex">
+                                           <input type="text" class="form-control rounded-left" placeholder="Enter your email address">
+                                           <input type="submit" value="Subscribe" class="form-control submit px-3 rounded-right">
+                                       </div>
+                                   </form>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="row mt-5 pt-4 border-top">
+                       <div class="col-md-6 col-lg-8">
+                           <p class="copyright">© <script>document.write(new Date().getFullYear());</script> All rights reserved | EcoTrace - Track and Reduce Your Carbon Footprint</p>
+                       </div>
+                       <div class="col-md-6 col-lg-4 text-md-right">
+                           <p class="mb-0 list-unstyled">
+                               <a class="mr-md-3" href="#">Terms &amp; Conditions</a>
+                               <a class="mr-md-3" href="#">Privacy Policy</a>
+                           </p>
+                       </div>
+                   </div>
+               </div>
+           </footer>
+      </div>      
+      <!--Footer Section End-->   
 
    </body>
 </html>
