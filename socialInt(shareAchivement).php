@@ -10,7 +10,7 @@ function weeklyLogUpToDate($con) {
 }
 
 // Establish a connection to your MySQL database
-$servername = "localhost:3307"; // Change this to your database server name
+$servername = "localhost"; // Change this to your database server name
 $username = "root"; // Change this to your database username
 $password = ""; // Change this to your database password
 $database = "bit210"; // Change this to your database name

@@ -108,9 +108,9 @@ function weeklyLogUpToDate($con) {
                        <li class="nav-item">
                            <a class="nav-link active" href="index.php">Home</a>
                        </li>
-                       <li class="nav-item">
+                       <!-- <li class="nav-item">
                            <a class="nav-link" href="#about">About</a>
-                       </li>
+                       </li> -->
                        <li class="nav-item">
                            <a class="nav-link" href="events.php">Events</a>
                        </li>
@@ -121,7 +121,7 @@ function weeklyLogUpToDate($con) {
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="#">Learn</a>
+                           <a class="nav-link" href="display4.php">Learn</a>
                        </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
