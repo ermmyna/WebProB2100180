@@ -111,7 +111,7 @@ HTML;
       <tbody class=bg-white>
         <?php
         // Fetch content from database
-        $query = "SELECT * FROM eduContent";
+        $query = "SELECT * FROM educontent";
         $result = mysqli_query($con, $query);
         $i = 1;
         $fetch_src = FETCH_SRC;
@@ -121,7 +121,7 @@ HTML;
           echo <<<HTML
             <tr class="align-middle">
               <th scope="row">$i</th>
-              <td><img src="$fetch_src$fetch[content]" width="150px" alt="Content Image"></td>
+              <td><img src="$fetch_src $fetch[content]" width="150px" alt="Content Image"></td>
               <td>$fetch[categoryOfContent]</td>
               <td>$fetch[title]</td>
               <td>$fetch[description]</td>
@@ -137,8 +137,92 @@ HTML;
     </table>
   </div>
 
-  <!-- Add Content Modal -->
-  <div class="modal fade" id="addContentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+
+<!-- Add Content Modal -->
+<div class="modal fade" id="addContentModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add New Content</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="add_content.php" method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="typeOfContent" class="form-label">Type of Content</label>
+            <select class="form-select" id="typeOfContent" name="typeOfContent" required>
+              <option value="Article">Article</option>
+              <option value="Infographic">Infographic</option>
+              <option value="Video">Video</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="categoryOfContent" class="form-label">Category of Content</label>
+            <select class="form-select" id="categoryOfContent" name="categoryOfContent" required>
+              <!-- Populate categories dynamically if needed -->
+              <option value="Category 1">Transportation</option>
+              <option value="Category 2">Environmental Issue</option>
+              <option value="Category 3">Dietary Choice</option>
+              <option value="Category 4">Energy Consumption</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <input type="file" class="form-control" id="content" name="content" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Content</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+        <!-- Add your form or content for adding new content here -->
+       
+          <div class="mb-3">
+            <label for="typeOfContent" class="form-label">Type of Content</label>
+            <select class="form-select" id="typeOfContent" name="typeOfContent" required>
+              <option value="Article">Article</option>
+              <option value="Infographic">Infographic</option>
+              <option value="Video">Video</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="categoryOfContent" class="form-label">Category of Content</label>
+            <select class="form-select" id="categoryOfContent" name="categoryOfContent" required>
+              <!-- Populate categories dynamically if needed -->
+              <option value="Category 1">Category 1</option>
+              <option value="Category 2">Category 2</option>
+              <option value="Category 3">Category 3</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="content" class="form-label">Content</label>
+            <input type="file" class="form-control" id="content" name="content" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Add Content</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
     <!-- Modal content -->
   </div>
 
@@ -159,7 +243,7 @@ HTML;
     // Function to confirm content removal
     function confirmRem(id) {
       if(confirm("Are you sure you want to delete this content?")) {
-        window.location.href = "crud2.php?rem=" + id;
+        window.location.href = "delete_content.php?id=" + id;
       }
     }
   </script>
