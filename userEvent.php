@@ -580,7 +580,7 @@ if ($result->num_rows > 0) {
             <!-- Edit and Delete Buttons -->
             <div style="text-align: center;" class="register"></div>
                 <button onclick="registerEvent(<?php echo $eventId; ?>)">Register</button>
-                <a href="event-details1.php">View Full Details</a>
+                <a href="event-details7.php">View Full Details</a>
             </div>
         </div>
     </div>
