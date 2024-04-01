@@ -42,6 +42,17 @@ INSERT INTO `admin` (`adminID`, `username`, `password`, `email`) VALUES
 ('AD01', 'admin210', 'admin210', 'admin210@ecoTrace.com');
 
 -- --------------------------------------------------------
+--
+-- Table for event registration
+--
+CREATE TABLE bit210.registration (
+    registrationId INT PRIMARY KEY AUTO_INCREMENT,
+    userID INT,
+    eventId INT,
+    registrationDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userID) REFERENCES bit210.user(userID),
+    FOREIGN KEY (eventId) REFERENCES bit210.events(eventId)
+);
 
 --
 -- Table structure for table `carboncalculator`

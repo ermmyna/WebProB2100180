@@ -205,6 +205,7 @@ function weeklyLogUpToDate($con) {
          </section>
          <!--Inner Header End--> 
 
+    <!-- User -->
 <div class="wrapper">
         <?php
 
@@ -256,8 +257,11 @@ function weeklyLogUpToDate($con) {
           }
           return $text;
       }
+    ?>
+</div>
 
-      // Pagination navigation
+<?php
+
       echo '<div class="pagination-container">'; 
       echo '<div class="col-md-12">';
       echo '<div class="gt-pagination mt20">';
@@ -317,7 +321,41 @@ function weeklyLogUpToDate($con) {
         </div>
     </div>
     <!-- Modal End -->
+
+ <!-- Feedback Modal -->
+<div class="modal fade" id="feedbackModal" tabindex="-1" role="dialog" aria-labelledby="feedbackModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="feedbackModalLabel">Feedback</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <?php if(isset($_GET['success']) && $_GET['success'] === 'feedback_sent'): ?>
+                    <div class="alert alert-success" role="alert">
+                        Feedback has been sent successfully!
+                    </div>
+                <?php elseif(isset($_GET['error']) && $_GET['error'] === 'feedback_error'): ?>
+                    <div class="alert alert-danger" role="alert">
+                        Error occurred while sending feedback. Please try again later.
+                    </div>
+                <?php endif; ?>
+                <form action="" method="post">
+                    <div class="form-group">
+                        <label for="feedbackTextarea">How can we improve?</label>
+                        <textarea class="form-control" id="feedbackTextarea" name="feedback" rows="3"></textarea>
+                    </div>
+                    <button type="submit" name="submitFeedback" class="btn btn-primary">Submit Feedback</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
+
+
+<!-- Feedback Modal End-->
 
     <div class="ftco-section wf100">
             <footer class="footer">
@@ -373,10 +411,14 @@ function weeklyLogUpToDate($con) {
                                            <input type="submit" value="Subscribe" class="form-control submit px-3 rounded-right">
                                        </div>
                                    </form>
+                                <div class="text-right mt-3">
+                                <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#feedbackModal" style="background-color: #0abab5;">Feedback</button>
+                                </div>
                                </div>
                            </div>
                        </div>
                    </div>
+                   
                    <div class="row mt-5 pt-4 border-top">
                        <div class="col-md-6 col-lg-8">
                            <p class="copyright">© <script>document.write(new Date().getFullYear());</script> All rights reserved | EcoTrace - Track and Reduce Your Carbon Footprint</p>
@@ -385,10 +427,12 @@ function weeklyLogUpToDate($con) {
                            <p class="mb-0 list-unstyled">
                                <a class="mr-md-3" href="#">Terms &amp; Conditions</a>
                                <a class="mr-md-3" href="#">Privacy Policy</a>
+                               
                            </p>
                        </div>
                    </div>
                </div>
+               
            </footer>
 </footer>
 </div> 
@@ -420,6 +464,16 @@ function weeklyLogUpToDate($con) {
             });
         });
     </script>
+
+<!-- Add the new script for feedback form -->
+<script>
+    $(document).ready(function () {
+        // Show feedback modal when feedback button is clicked
+        $('#feedbackModal').on('show.bs.modal', function (event) {
+            // Optional: Add any pre-processing logic here
+        });
+    });
+</script>
     <!-- JS Files End -->
 </body>
 

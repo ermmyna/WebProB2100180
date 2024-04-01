@@ -39,7 +39,7 @@ header h1 {
 }
 
 nav {
-    margin-top: 20px; /* Adjust as needed */
+    margin-top: 10px; /* Adjust as needed */
 }
 
 nav a {
@@ -60,9 +60,6 @@ nav a {
         <br>
         <nav>
             <a href="index.php">Home</a>
-        </nav>
-        <nav>
-            <a href="addEvent.php">Add Event</a>
         </nav>
     </header>
             
@@ -164,26 +161,22 @@ $conn->close();
     <li><strong>Time: <?php echo $time; ?></strong></li>
     <br>
 </ul>
-           <!-- Edit and Delete Buttons -->
-           <div style="text-align: center;" class="edit-delete-buttons">
-           <button onclick="editEvent(1)">Edit</button>
+           <!-- Register Button -->
+           <div style="text-align: center;" class="register">
+           <button onclick="registerEvent(1)">Register</button>
             <br>
-               <br>
-               <button onclick="deleteEvent(1)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
-           </div>
+            <br>
+            <a href="event-details1.php">View Full Details</a>
+        </div>
 <br><br>
            <script>
-function editEvent1(eventId) {
+function registerEvent(eventId) {
     // Construct the URL dynamically based on the event ID
-    var url = 'event' + eventId + '.php';
+    var url = 'registerEvent' + eventId + '.php';
     // Redirect to the dynamically generated URL
     window.location.href = url;
 
 }
-    function deleteEvent(eventId) {
-        // Call a JavaScript function to delete event with ID "1"
-        // Implement delete functionality here
-    }
     </script>
                        </div>
                    </div>
@@ -257,72 +250,24 @@ $conn->close();
     <br>
     <li><strong>Time: <?php echo $time; ?></strong></li>
     <br>
+    <br>
 </ul>
-           <!-- Edit and Delete Buttons -->
-           <div style="text-align: center;" class="edit-delete-buttons">
-            <button onclick="editEvent(2)">Edit</button> <!-- Assuming event ID is 2 -->
+           <!-- Register Button -->
+           <div style="text-align: center;" class="register">
+            <button onclick="registerEvent(2)">Register</button> <!-- Assuming event ID is 2 -->
             <br>
-               <br>
-               <button onclick="confirmDelete(2)">Delete</button>
+            <br>
+            <a href="event-details2.php">View Full Details</a>
                
                <script>
-function editEvent(eventId) {
+function registerEvent(eventId) {
     // Construct the URL dynamically based on the event ID
-    var url = 'event' + eventId + '.php';
+    var url = 'registerEvent' + eventId + '.php';
     // Redirect to the dynamically generated URL
     window.location.href = url;
 
 }
           </script>  
-          
-          <script>
-
-function confirmDelete(eventId) {
-    var confirmDelete = confirm('Are you sure you want to delete this event?');
-    if (confirmDelete) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'deleteEvent.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var eventToRemove = document.getElementById('event' + eventId);
-                    if (eventToRemove) {
-                        eventToRemove.remove();
-                        // Slide subsequent events left if the deleted event is event1, event2, or event3
-                        if (eventId === 1 || eventId === 2 || eventId === 3) {
-                            for (let i = eventId + 1; i <= 3; i++) {
-                                const currentEvent = document.getElementById('event' + i);
-                                if (currentEvent) {
-                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
-                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
-                                }
-                            }
-                        }
-                    } else {
-                        alert('Error: Event element not found.');
-                    }
-
-                    // Move event3 to the position of event2
-                    var event3 = document.getElementById('event3');
-                    var event2 = document.getElementById('event2');
-                    var event4 = document.getElementById('event4');
-                    if (event3 && event2 && event4) {
-                        event3.style.transition = "transform 0.5s ease-in-out";
-                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
-                        event4.style.transition = "transform 0.5s ease-in-out";
-                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
-                    }
-                } else {
-                    alert('Error deleting event.');
-                }
-            }
-        };
-        xhr.send('eventId=' + eventId);
-    }
-}
-
-</script>
     
             </div>
        </div>
@@ -397,69 +342,19 @@ $conn->close();
 </ul>
 
                                   <!-- Edit and Delete Buttons -->
-                                 <div style="text-align: center;" class="edit-delete-buttons">
-                                  <button onclick="editEvent(3)">Edit</button> <!-- Assuming event ID is 3 -->
+                                 <div style="text-align: center;" class="register">
+                                  <button onclick="registerEvent(3)">Register</button> <!-- Assuming event ID is 3 -->
                                   <br>
                                      <br>
-                                     <button onclick="confirmDelete(3)">Delete</button> <!-- Call a JavaScript function to delete event with ID "3" -->
-                                     
+                                    <a href="event-details3.php">View Full Details</a>
                                      <script>
 function editEvent(eventId) {
     // Construct the URL dynamically based on the event ID
-    var url = 'event' + eventId + '.php';
+    var url = 'registerEvent' + eventId + '.php';
     // Redirect to the dynamically generated URL
     window.location.href = url;
 
 }
-</script>
-
-<script>
-
-function confirmDelete(eventId) {
-    var confirmDelete = confirm('Are you sure you want to delete this event?');
-    if (confirmDelete) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'deleteEvent.php', true);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var eventToRemove = document.getElementById('event' + eventId);
-                    if (eventToRemove) {
-                        eventToRemove.remove();
-                        // Slide subsequent events left if the deleted event is event1, event2, or event3
-                        if (eventId === 1 || eventId === 2 || eventId === 3) {
-                            for (let i = eventId + 1; i <= 3; i++) {
-                                const currentEvent = document.getElementById('event' + i);
-                                if (currentEvent) {
-                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
-                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
-                                }
-                            }
-                        }
-                    } else {
-                        alert('Error: Event element not found.');
-                    }
-
-                    // Move event3 to the position of event2
-                    var event3 = document.getElementById('event3');
-                    var event2 = document.getElementById('event2');
-                    var event4 = document.getElementById('event4');
-                    if (event3 && event2 && event4) {
-                        event3.style.transition = "transform 0.5s ease-in-out";
-                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
-                        event4.style.transition = "transform 0.5s ease-in-out";
-                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
-                    }
-                } else {
-                    alert('Error deleting event.');
-                }
-            }
-        };
-        xhr.send('eventId=' + eventId);
-    }
-}
-
 </script>
                                     </div>
                               </div>
@@ -532,12 +427,11 @@ $conn->close();
 </ul>
                               <br>
                                   <!-- Edit and Delete Buttons -->
-                                 <div style="text-align: center;" class="edit-delete-buttons">
-                                  <button onclick="editEvent(4)">Edit</button> <!-- Assuming event ID is 4 -->
+                                 <div style="text-align: center;" class="register">
+                                  <button onclick="registerEvent(4)">Register</button> <!-- Assuming event ID is 4 -->
                                   <br>
                                      <br>
-                                     <button onclick="deleteEvent(4)">Delete</button> <!-- Call a JavaScript function to delete event with ID "4" -->
-                                 <br><br><br>
+                                <a href="event-details4.php">View Full Details</a>
                                     </div>
                               </div>
                               </div>
@@ -610,12 +504,12 @@ $conn->close();
 <br>
 <br>
                                   <!-- Edit and Delete Buttons -->
-                                 <div style="text-align: center;" class="edit-delete-buttons">
-                                  <button onclick="editEvent(5)">Edit</button> <!-- Assuming event ID is 5 -->
+                                 <div style="text-align: center;" class="register">
+                                  <button onclick="registerEvent(5)">Register</button> <!-- Assuming event ID is 5 -->
                                   <br>
-                                     <br>
-                                     <button onclick="deleteEvent(5)">Delete</button> <!-- Call a JavaScript function to delete event with ID "5" -->
-                                 </div>
+                                  <br>
+                                  <a href="event-details5.php">View Full Details</a>
+                                </div>
                            </div>
                         </div>
                      </div>
@@ -684,11 +578,9 @@ if ($result->num_rows > 0) {
             <br>
             <br>
             <!-- Edit and Delete Buttons -->
-            <div style="text-align: center;" class="edit-delete-buttons">
-                <button onclick="editEvent(<?php echo $eventId; ?>)">Edit</button>
-                <br>
-                <br>
-                <button onclick="deleteEvent(<?php echo $eventId; ?>)">Delete</button>
+            <div style="text-align: center;" class="register"></div>
+                <button onclick="registerEvent(<?php echo $eventId; ?>)">Register</button>
+                <a href="event-details1.php">View Full Details</a>
             </div>
         </div>
     </div>
@@ -698,30 +590,31 @@ if ($result->num_rows > 0) {
                      <!--Blog Post End--> 
                      <!--Blog Post Start-->
 
-                     <!--Sorting list of month of events-->
-                     <script>
+                   
                      
-                     function showList() {
-                     var selectedMonth = document.getElementById("month").value;
-                     var eventPosts = document.querySelectorAll('.events > .event-grid-2 > .container > .row > div');
+                     <!-- Sorting list of month of events -->
+<script>
+function showList() {
+    var selectedMonth = document.getElementById("month").value;
+    var eventPosts = document.querySelectorAll('.events > .event-grid-2 > .container > .row > div');
 
-                     eventPosts.forEach(function(post) {
-                        if (selectedMonth === 'all' || post.classList.contains(selectedMonth)) {
-                              post.style.display = 'block'; // Show selected month's posts or all posts if 'all' is selected
-                        } else {
-                              post.style.display = 'none'; // Hide posts of other months
-                        }
-                     });
+    eventPosts.forEach(function(post) {
+        if (selectedMonth === 'all' || post.classList.contains(selectedMonth)) {
+            post.style.display = 'block'; // Show selected month's posts or all posts if 'all' is selected
+        } else {
+            post.style.display = 'none'; // Hide posts of other months
+        }
+    });
 
-                     var notFoundMessage = document.getElementById("not-found");
+    var notFoundMessage = document.getElementById("not-found");
 
-                     if (selectedMonth === 'all' || document.querySelectorAll('.events > .event-grid-2 > .container > .row > .' + selectedMonth).length > 0) {
-                        notFoundMessage.style.display = 'none'; // Hide message if events found for selected month or if 'all' is selected
-                     } else {
-                        notFoundMessage.style.display = 'block'; // Show message if no events found for selected month
-                     }
-                  }
-                     </script>
+    if (selectedMonth === 'all' || document.querySelectorAll('.events > .event-grid-2 > .container > .row > .' + selectedMonth).length > 0) {
+        notFoundMessage.style.display = 'none'; // Hide message if events found for selected month or if 'all' is selected
+    } else {
+        notFoundMessage.style.display = 'block'; // Show message if no events found for selected month
+    }
+}
+</script>
                      <br><br><br>
                      <!--Blog Post End--> 
                   </div>
@@ -773,9 +666,7 @@ if ($result->num_rows > 0) {
                    <div class="row">
                        <div class="col-md-6">
                            <div class="d-flex align-items-center justify-content-between mb-4">
-                               
-                              <div class="logo-space">
-                                  <img src="images/EcoTrace Logo.png" alt="Eco Trace Logo" class="logo-img">
+                                                                 <img src="images/EcoTrace Logo.png" alt="Eco Trace Logo" class="logo-img">
                               </div>
                           </div>
               

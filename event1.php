@@ -94,29 +94,29 @@
             <img src="images/EcoTrace Logo.png" alt="" class="medium-image"> <!-- Place the logo on the left side -->
         </div>
         <div class="center-image">
-            <img src="images/eg2.jpg" alt="" class="medium-image1"> <!-- Place the image in the center -->
+            <img src="images/eg1.jpg" alt="" class="medium-image1"> <!-- Place the image in the center -->
         </div>
         <div class="registration-form">
-            <h2>Edit Event 2</h2>
+            <h2>Edit Event 1</h2>
             <br>
             <form id="editEventForm" action="update_event.php" method="POST">
                 <!-- Include a hidden input field to pass the event ID -->
-                <input type="hidden" id="eventId" name="eventId" value="2"> <!-- Replace "2" with the actual event ID -->
+                <input type="hidden" id="eventId" name="eventId" value="1"> <!-- Replace "2" with the actual event ID -->
         
                 <label for="eventName">Event Name:</label><br>
-                <input type="text" id="eventName" name="eventName" value="Every Action Counts: Join for Our Future" style="width: 350px;" required>
+                <input type="text" id="eventName" name="eventName" value="Awareness Campaign to Save Forest" style="width: 350px;" required>
                 <br>
                 <br>
                 <label for="organizers">Organizers:</label><br>
-                <input type="text" id="organizers" name="organizers" value="Universiti Putra Malaysia (Faculty of Agriculture)" style="width: 350px;" required>
+                <input type="text" id="organizers" name="organizers" value="Universiti Malaya (Institute of Biological Sciences)" style="width: 350px;" required>
                 <br>
                 <br>
                 <label for="date">Date:</label><br>
-                <input type="date" id="date" name="date" value="2024-04-30" style="width: 350px;" required>
+                <input type="date" id="date" name="date" value="2024-04-02" style="width: 350px;" required>
                 <br>
                 <br>
                 <label for="time">Time:</label><br>
-                <input type="text" id="time" name="time" value="9:00 am - 1:00 pm" style="width: 350px;" required>
+                <input type="text" id="time" name="time" value="9:00 am - 12:30 pm" style="width: 350px;" required>
                 <br>
                 <br>
                 <input type="submit" value="Update" onclick="updateEvent();">
