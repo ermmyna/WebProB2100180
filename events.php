@@ -45,6 +45,12 @@ function isLoggedIn()
       <!-- CSS FILES End -->
     
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .edit-delete-buttons {
+            text-align: left;
+            margin-left: 80px; /* Adjust margin as needed */
+        }
+    </style>
 
 </head>
 <body>
@@ -171,62 +177,14 @@ function isLoggedIn()
             <h1>Upcoming Events</h1>
         </div>
     </section>
-         <!--Inner Header End--> 
-    
-         <div class="container">
-         <div class="row">
-                <h5>Select a month:</h5>
-                <div class="col-md-2">
-                    <select id="month" class="form-control" onchange="showList()">
-                        <option value="january">January</option>
-                        <option value="february">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="august">August</option>
-                        <option value="september">September</option>
-                        <option value="october">October</option>
-                        <option value="november">November</option>
-                        <option value="december">December</option>
-                        <option value="all">All</option>
-                    </select>
+       
                </div>
             </div>
          </div>
         
+<img src="images/eg1.jpg">
 
-            
-            
-            
-
-           
-
-
-         
-
-<div id="not-found" style="display:none; color:black;">Sorry! Events is not available on this month. We will try our best!</div>
-
-         <!-- Inner Header End --> 
-         <!-- Causes Start -->
-         <section class="wf100 p80 events">
-   <div class="event-grid-2">
-       <div class="container">
-           <div class="row">
-
-               <!-- Blog Post Start for April -->
-               <div class="col-lg-4 col-md-6 april">
-                   <div class="event-post" id="event1">
-                       <div class="event-thumb"> 
-                           <img src="images/eg1.jpg" alt="">
-                       </div>
-                       <div class="event-txt">
-                       <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Awareness Campaign to Save Forest</a></h5>
-                       <br>    
-                       <br>
-
-                       <?php
+<?php
 // Initialize variables
 $eventName = '';
 $organizers = '';
@@ -234,7 +192,7 @@ $date = '';
 $time = '';
 
 // Connect to your database
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $dbname = "bit210";
@@ -273,49 +231,77 @@ $conn->close();
 ?>
 
 <ul class="etime">
-    <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
-    <br>
-    <li><strong>Date: <?php echo $date; ?></strong></li>
-    <br>
-    <li><strong>Time: <?php echo $time; ?></strong></li>
-    <br>
-</ul>
-           <!-- Edit and Delete Buttons -->
-           <div style="text-align: center;" class="edit-delete-buttons">
-           <button onclick="editEvent(1)">Edit</button>
-            <br>
-               <br>
-               <button onclick="deleteEvent(1)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
-           </div>
-<br><br>
-           <script>
-function editEvent1(eventId) {
-    // Construct the URL dynamically based on the event ID
-    var url = 'event' + eventId + '.php';
-    // Redirect to the dynamically generated URL
-    window.location.href = url;
+        <li><strong>Organizers: <?php echo $organizers; ?></strong></li>
+        <br>
+        <li><strong>Date: <?php echo $date; ?></strong></li>
+        <br>
+        <li><strong>Time: <?php echo $time; ?></strong></li>
+        <br>
+    </ul>
+    <!-- Edit and Delete Buttons -->
+    <div class="edit-delete-buttons">
+        <button onclick="editEvent1(1)">Edit</button>
+        <br>
+        <br>
+        <button onclick="confirmDelete(1)">Delete</button> <!-- Call a JavaScript function to delete event with ID "1" -->
+    </div>
+    <br><br>
 
-}
-    function deleteEvent(eventId) {
-        // Call a JavaScript function to delete event with ID "1"
-        // Implement delete functionality here
+    <script>
+        function editEvent1(eventId) {
+            // Construct the URL dynamically based on the event ID
+            var url = 'event' + eventId + '.php';
+            // Redirect to the dynamically generated URL
+            window.location.href = url;
+        }
+function confirmDelete(eventId) {
+    var confirmDelete = confirm('Are you sure you want to delete this event?');
+    if (confirmDelete) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'deleteEvent.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var eventToRemove = document.getElementById('event' + eventId);
+                    if (eventToRemove) {
+                        eventToRemove.remove();
+                        // Slide subsequent events left if the deleted event is event1, event2, or event3
+                        if (eventId === 1 || eventId === 2 || eventId === 3) {
+                            for (let i = eventId + 1; i <= 3; i++) {
+                                const currentEvent = document.getElementById('event' + i);
+                                if (currentEvent) {
+                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
+                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
+                                }
+                            }
+                        }
+                    } else {
+                        alert('Error: Event element not found.');
+                    }
+
+                    // Move event3 to the position of event2
+                    var event3 = document.getElementById('event3');
+                    var event2 = document.getElementById('event2');
+                    var event4 = document.getElementById('event4');
+                    if (event3 && event2 && event4) {
+                        event3.style.transition = "transform 0.5s ease-in-out";
+                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
+                        event4.style.transition = "transform 0.5s ease-in-out";
+                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
+                    }
+                } else {
+                    alert('Error deleting event.');
+                }
+            }
+        };
+        xhr.send('eventId=' + eventId);
     }
+}
     </script>
-                       </div>
-                   </div>
-                  </div>
-                    <!--Blog Post End--> 
-                    
-                    <?php
-
-?>
 
 <!--Blog Post Start-->
-<div class="col-lg-4 col-md-30 april">
-   <div class="event-post" id="event2">
-       <div class="event-thumb"> 
            <img src="images/eg2.jpg" alt="">
-       </div>
        <div class="event-txt">
     <h5 style="color: white;"><a href="#" style="color: black; text-decoration: none;">Every Action Counts: Join for Our Future</a></h5>
     <br>
@@ -328,7 +314,7 @@ $date = '';
 $time = '';
 
 // Connect to your database
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $dbname = "bit210";
@@ -375,12 +361,12 @@ $conn->close();
     <br>
 </ul>
            <!-- Edit and Delete Buttons -->
-           <div style="text-align: center;" class="edit-delete-buttons">
+           <div style="text-align: left;" class="edit-delete-buttons">
             <button onclick="editEvent(2)">Edit</button> <!-- Assuming event ID is 2 -->
             <br>
                <br>
                <button onclick="confirmDelete(2)">Delete</button>
-               
+               <br><Br>
                <script>
 function editEvent(eventId) {
     // Construct the URL dynamically based on the event ID
@@ -447,12 +433,8 @@ function confirmDelete(eventId) {
 
 <!-- Include any JavaScript files -->
 
-         <!--Blog Post End--> 
-                     
+         <!--Blog Post End-->    
                      <!--Blog Post Start-->
-                     <div class="col-lg-4 col-md-5 may">
-                        <div class="event-post" id="event3">
-                           <div class="event-thumb"> 
                               <img src="images/eg3.jpg" alt=""></div>
                            <div class="event-txt">
                               <h5 style="color: white;"><a href="#" style="color: black; text-decoration: none;">Reimagine! Creative Solutions for Our Country</a></h5>
@@ -465,7 +447,7 @@ $date = '';
 $time = '';
 
 // Connect to your database
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $dbname = "bit210";
@@ -513,12 +495,13 @@ $conn->close();
 </ul>
 
                                   <!-- Edit and Delete Buttons -->
-                                 <div style="text-align: center;" class="edit-delete-buttons">
+                                 <div style="text-align: left;" class="edit-delete-buttons">
                                   <button onclick="editEvent(3)">Edit</button> <!-- Assuming event ID is 3 -->
                                   <br>
                                      <br>
                                      <button onclick="confirmDelete(3)">Delete</button> <!-- Call a JavaScript function to delete event with ID "3" -->
-                                     
+                                     <br>
+                                     <br>
                                      <script>
 function editEvent(eventId) {
     // Construct the URL dynamically based on the event ID
@@ -582,11 +565,6 @@ function confirmDelete(eventId) {
                               </div>
                      </div>
 
-                     <!--Blog Post End-->
-                     <!--Blog Post Start-->
-                     <div class="col-lg-4 col-md-6 may">
-                        <div class="event-post" id="event4">
-                           <div class="event-thumb"> 
                               <img src="images/eg4.jpg" alt=""></div>
                            <div class="event-txt">
                            <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Our Planet Needs You</a></h5>
@@ -600,7 +578,7 @@ $date = '';
 $time = '';
 
 // Connect to your database
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $dbname = "bit210";
@@ -646,23 +624,78 @@ $conn->close();
     <li><strong>Time: <?php echo $time; ?></strong></li>
     <br>
 </ul>
-                              <br>
                                   <!-- Edit and Delete Buttons -->
-                                 <div style="text-align: center;" class="edit-delete-buttons">
+                                 <div style="text-align: left;" class="edit-delete-buttons">
                                   <button onclick="editEvent(4)">Edit</button> <!-- Assuming event ID is 4 -->
                                   <br>
                                      <br>
-                                     <button onclick="deleteEvent(4)">Delete</button> <!-- Call a JavaScript function to delete event with ID "4" -->
+                                     <button onclick="confirmDelete(4)">Delete</button> <!-- Call a JavaScript function to delete event with ID "4" -->
                                  <br><br><br>
                                     </div>
                               </div>
                               </div>
                      </div>
+
+                     <script>
+function editEvent(eventId) {
+    // Construct the URL dynamically based on the event ID
+    var url = 'event' + eventId + '.php';
+    // Redirect to the dynamically generated URL
+    window.location.href = url;
+
+}
+</script>
+
+<script>
+
+function confirmDelete(eventId) {
+    var confirmDelete = confirm('Are you sure you want to delete this event?');
+    if (confirmDelete) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'deleteEvent.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var eventToRemove = document.getElementById('event' + eventId);
+                    if (eventToRemove) {
+                        eventToRemove.remove();
+                        // Slide subsequent events left if the deleted event is event1, event2, or event3
+                        if (eventId === 1 || eventId === 2 || eventId === 3) {
+                            for (let i = eventId + 1; i <= 3; i++) {
+                                const currentEvent = document.getElementById('event' + i);
+                                if (currentEvent) {
+                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
+                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
+                                }
+                            }
+                        }
+                    } else {
+                        alert('Error: Event element not found.');
+                    }
+
+                    // Move event3 to the position of event2
+                    var event3 = document.getElementById('event3');
+                    var event2 = document.getElementById('event2');
+                    var event4 = document.getElementById('event4');
+                    if (event3 && event2 && event4) {
+                        event3.style.transition = "transform 0.5s ease-in-out";
+                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
+                        event4.style.transition = "transform 0.5s ease-in-out";
+                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
+                    }
+                } else {
+                    alert('Error deleting event.');
+                }
+            }
+        };
+        xhr.send('eventId=' + eventId);
+    }
+}
+
+</script>
                      <!--Blog Post End--> 
-                     <!--Blog Post Start-->
-                     <div class="col-lg-4 col-md-6 june">
-                        <div class="event-post" id="event5">
-                           <div class="event-thumb"> 
+                     
                               <img src="images/eg5.jpg" alt=""></div>
                            <div class="event-txt">
                            <h5 style="color: black;"><a href="#" style="color: black; text-decoration: none;">Save the Planet, Don't Let It Fizzle!</a>
@@ -677,7 +710,7 @@ $date = '';
 $time = '';
 
 // Connect to your database
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $dbname = "bit210";
@@ -723,10 +756,8 @@ $conn->close();
     <li><strong>Time: <?php echo $time; ?></strong></li>
     <br>
 </ul>
-<br>
-<br>
                                   <!-- Edit and Delete Buttons -->
-                                 <div style="text-align: center;" class="edit-delete-buttons">
+                                 <div style="text-align: left;" class="edit-delete-buttons">
                                   <button onclick="editEvent(5)">Edit</button> <!-- Assuming event ID is 5 -->
                                   <br>
                                      <br>
@@ -735,7 +766,7 @@ $conn->close();
                            </div>
                         </div>
                      </div>
-                     <br><br>
+                     <br>
 
                      <?php
 // Initialize variables
@@ -746,7 +777,7 @@ $date = '';
 $time = '';
 
 // Connect to your database
-$servername = "localhost";
+$servername = "localhost:3307";
 $username = "root";
 $password = "";
 $dbname = "bit210";
@@ -781,9 +812,7 @@ if ($result->num_rows > 0) {
 }
 ?>
 
-<div class="col-lg-4 col-md-6 june">
     <div class="event-post" id="event<?php echo $eventId; ?>">
-        <div class="event-thumb">
             <img src="images/eg6.jpg" alt="">
         </div>
         <div class="event-txt">
@@ -798,18 +827,76 @@ if ($result->num_rows > 0) {
                 <br>
             </ul>
             <br>
-            <br>
             <!-- Edit and Delete Buttons -->
-            <div style="text-align: center;" class="edit-delete-buttons">
+            <div style="text-align: left;" class="edit-delete-buttons">
                 <button onclick="editEvent(<?php echo $eventId; ?>)">Edit</button>
                 <br>
                 <br>
-                <button onclick="deleteEvent(<?php echo $eventId; ?>)">Delete</button>
+                <button onclick="confirmDelete(<?php echo $eventId; ?>)">Delete</button>
             </div>
         </div>
     </div>
 </div>
 <br><br>
+
+<script>
+function editEvent(eventId) {
+    // Construct the URL dynamically based on the event ID
+    var url = 'event' + eventId + '.php';
+    // Redirect to the dynamically generated URL
+    window.location.href = url;
+
+}
+</script>
+
+<script>
+
+function confirmDelete(eventId) {
+    var confirmDelete = confirm('Are you sure you want to delete this event?');
+    if (confirmDelete) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'deleteEvent.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var eventToRemove = document.getElementById('event' + eventId);
+                    if (eventToRemove) {
+                        eventToRemove.remove();
+                        // Slide subsequent events left if the deleted event is event1, event2, or event3
+                        if (eventId === 1 || eventId === 2 || eventId === 3) {
+                            for (let i = eventId + 1; i <= 3; i++) {
+                                const currentEvent = document.getElementById('event' + i);
+                                if (currentEvent) {
+                                    currentEvent.style.transition = "transform 0.5s ease-in-out";
+                                    currentEvent.style.transform = "translateX(-100%)"; // Slide left
+                                }
+                            }
+                        }
+                    } else {
+                        alert('Error: Event element not found.');
+                    }
+
+                    // Move event3 to the position of event2
+                    var event3 = document.getElementById('event3');
+                    var event2 = document.getElementById('event2');
+                    var event4 = document.getElementById('event4');
+                    if (event3 && event2 && event4) {
+                        event3.style.transition = "transform 0.5s ease-in-out";
+                        event3.style.transform = "translate(0%, -108%)"; // Move to event2 position
+                        event4.style.transition = "transform 0.5s ease-in-out";
+                        event4.style.transform = "translate(226%, -108%)"; // Move to right side of event3
+                    }
+                } else {
+                    alert('Error deleting event.');
+                }
+            }
+        };
+        xhr.send('eventId=' + eventId);
+    }
+}
+
+</script>
                      <!-- Include any JavaScript files -->
                      <!--Blog Post End--> 
                      <!--Blog Post Start-->
@@ -840,11 +927,6 @@ if ($result->num_rows > 0) {
                      </script>
                      <br><br><br>
                      <!--Blog Post End--> 
-                  </div>
-                  <div class="row">
-                     <div class="col-md-12">
-                        <div class="gt-pagination mt20">
-                           
                         </div>
                      </div>
                   </div>
@@ -954,4 +1036,9 @@ if ($result->num_rows > 0) {
    <script src="js/isotope.min.js"></script> 
    <script src="js/main.js"></script>
    </body>
+</html>
+
+
+
+</body>
 </html>
