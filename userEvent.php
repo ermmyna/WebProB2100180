@@ -165,6 +165,8 @@ $conn->close();
            <div style="text-align: center;" class="register">
            <button onclick="registerEvent(1)">Register</button>
             <br>
+            <br>
+            <a href="event-details1.php">View Full Details</a>
         </div>
 <br><br>
            <script>
@@ -254,6 +256,8 @@ $conn->close();
            <div style="text-align: center;" class="register">
             <button onclick="registerEvent(2)">Register</button> <!-- Assuming event ID is 2 -->
             <br>
+            <br>
+            <a href="event-details2.php">View Full Details</a>
                
                <script>
 function registerEvent(eventId) {
@@ -342,7 +346,7 @@ $conn->close();
                                   <button onclick="registerEvent(3)">Register</button> <!-- Assuming event ID is 3 -->
                                   <br>
                                      <br>
-                                     
+                                    <a href="event-details3.php">View Full Details</a>
                                      <script>
 function editEvent(eventId) {
     // Construct the URL dynamically based on the event ID
@@ -427,6 +431,7 @@ $conn->close();
                                   <button onclick="registerEvent(4)">Register</button> <!-- Assuming event ID is 4 -->
                                   <br>
                                      <br>
+                                <a href="event-details4.php">View Full Details</a>
                                     </div>
                               </div>
                               </div>
@@ -502,6 +507,8 @@ $conn->close();
                                  <div style="text-align: center;" class="register">
                                   <button onclick="registerEvent(5)">Register</button> <!-- Assuming event ID is 5 -->
                                   <br>
+                                  <br>
+                                  <a href="event-details5.php">View Full Details</a>
                                 </div>
                            </div>
                         </div>
@@ -573,6 +580,7 @@ if ($result->num_rows > 0) {
             <!-- Edit and Delete Buttons -->
             <div style="text-align: center;" class="register"></div>
                 <button onclick="registerEvent(<?php echo $eventId; ?>)">Register</button>
+                <a href="event-details1.php">View Full Details</a>
             </div>
         </div>
     </div>
