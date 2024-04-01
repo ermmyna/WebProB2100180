@@ -121,7 +121,7 @@ function weeklyLogUpToDate($con) {
                            <a class="nav-link" href="carbon_dash.php">Dashboard</a>
                        </li>
                        <li class="nav-item">
-                           <a class="nav-link" href="#">Learn</a>
+                           <a class="nav-link" href="display4.php">Learn</a>
                        </li>
                        <?php if (isLoggedIn()): ?>
                        <li class="nav-item">
@@ -129,9 +129,6 @@ function weeklyLogUpToDate($con) {
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
                        </li>
                        <?php endif; ?>
                    </ul>
@@ -179,6 +176,18 @@ function weeklyLogUpToDate($con) {
                      <li class="nav-item profile-dropdown">
                         <img src="images/profile.jpg" class="profile" />
                         <ul class="profile-menu">
+                           <li class="sub-item">
+                               <a href="socialInt(chat).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Chat Room</p>
+                               </a>
+                           </li>
+                           <li class="sub-item">
+                               <a href="socialInt(shareAchivement).php" style="display: flex; align-items: center; text-decoration: none;">
+                                  <span class="material-icons-outlined"> manage_accounts </span>
+                                  <p>Share Achievements</p>
+                               </a>
+                           </li>
                            <li class="sub-item">
                                <a href="profile.php" style="display: flex; align-items: center; text-decoration: none;">
                                   <span class="material-icons-outlined"> manage_accounts </span>

@@ -262,21 +262,22 @@ if (isset($_POST['save-btn'])) {
     $commutingMethod = isset($_POST["commutingMethodModal"]) ? mysqli_real_escape_string($con, $_POST["commutingMethodModal"]) : null;
     $dietPreferences = isset($_POST["dietPreferenceModal"]) ? mysqli_real_escape_string($con, $_POST["dietPreferenceModal"]) : null;
     $energySource = isset($_POST["energySourceModal"]) ? mysqli_real_escape_string($con, $_POST["energySourceModal"]) : null;
+    $reminder = isset($_POST["reminderModal"]) ? mysqli_real_escape_string($con, $_POST["reminderModal"]) : null;
 
     // Validate form data
     $errors = [];
-    if (!$userID || !$username || !$firstName || !$lastName || !$email || !$contactNumber || !$commutingMethod || !$dietPreferences || !$energySource) {
+    if (!$userID || !$username || !$firstName || !$lastName || !$email || !$contactNumber || !$commutingMethod || !$dietPreferences || !$energySource || !$reminder) {
         $errors[] = "All fields are required.";
     }    
 
     // If there are no errors, proceed with the update
     if (empty($errors)) {
         // Construct the update query
-        $sql = "UPDATE user SET username=?, firstName=?, lastName=?, email=?, contactNumber=?, commutingMethod=?, dietPreferences=?, energySource=? WHERE userID=?";
+        $sql = "UPDATE user SET username=?, firstName=?, lastName=?, email=?, contactNumber=?, commutingMethod=?, dietPreferences=?, energySource=?, reminder=? WHERE userID=?";
         $stmt = mysqli_prepare($con, $sql);
 
         // Bind parameters
-        mysqli_stmt_bind_param($stmt, "ssssssssi", $username, $firstName, $lastName, $email, $contactNumber, $commutingMethod, $dietPreferences, $energySource, $userID);
+        mysqli_stmt_bind_param($stmt, "sssssssssi", $username, $firstName, $lastName, $email, $contactNumber, $commutingMethod, $dietPreferences, $energySource, $reminder, $userID);
 
         // Execute the update query
         $result = mysqli_stmt_execute($stmt);

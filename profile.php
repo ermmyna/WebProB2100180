@@ -52,10 +52,12 @@ $contactNumber = $user['contactNumber'];
 $commutingMethod = $user['commutingMethod'];
 $dietPreferences = $user['dietPreferences'];
 $energySource = $user['energySource'];
+$reminder = $user['reminder'];
 
 $commutingMethodDisplay = getCommutingMethodDisplay($commutingMethod);
 $dietPreferencesDisplay = getDietPreferencesDisplay($dietPreferences);
 $energySourceDisplay = getEnergySourceDisplay($energySource);
+$reminderDisplay = getReminderDisplay($reminder);
 
 
 // Define the functions for converting values to display text
@@ -110,6 +112,18 @@ function getEnergySourceDisplay($value) {
        default:
            return "Not Specified";
    }
+}
+   function getReminderDisplay($value) {
+      switch ($value) {
+          case "daily":
+              return "Daily";
+          case "weekly":
+              return "Weekly";
+          case "monthly":
+              return "Monthly";
+          default:
+              return "None";
+      }
 }
 
 if(isset($_GET['alert']) && $_GET['alert'] == 'profile_incomplete') {
@@ -272,9 +286,6 @@ function weeklyLogUpToDate($con) {
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
                        </li>
                        <?php endif; ?>
                   </ul>
@@ -470,6 +481,15 @@ function weeklyLogUpToDate($con) {
                               <?php echo $energySourceDisplay; ?>
                            </div>
                            </div>
+                           <hr>
+                           <div class="row">
+                           <div class="col-sm-4">
+                              <h6 class="mb-0">Reminder Preference</h6>
+                           </div>
+                           <div class="col-sm-8 text-secondary">
+                              <?php echo $reminderDisplay; ?>
+                           </div>
+                           </div>
                         </div>
                      </div>
                      </div>
@@ -627,6 +647,19 @@ function weeklyLogUpToDate($con) {
                                                          <input type="text" id="other_energySource_textModal" name="other_energySourceModal" style="display: none;" placeholder="Please specify">
                                                       </div>
                                                 </div>
+                                                <div class="row mb-3">
+                                                      <div class="col-sm-4">
+                                                         <h6 class="mb-0">Reminder Preference</h6>
+                                                      </div>
+                                                      <div class="col-sm-8 text-secondary">
+                                                         <select id="reminderModal" name="reminderModal" class="form-control">
+                                                            <option value="" <?php if($reminder === null) echo "selected"; ?>>None</option>
+                                                            <option value="daily" <?php if($reminder == "daily") echo "selected"; ?>>Daily</option>
+                                                            <option value="weekly" <?php if($reminder == "weekly") echo "selected"; ?>>Weekly</option>
+                                                            <option value="monthly" <?php if($reminder == "monthly") echo "selected"; ?>>Monthly</option>
+                                                         </select>
+                                                      </div>
+                                                </div>
                                                 
                                                 <div class="row">
                                                    <div class="col-sm-4"></div>
@@ -663,11 +696,12 @@ function weeklyLogUpToDate($con) {
             var commutingMethod = document.forms["editProfileForm"]["commutingMethodModal"].value;
             var dietPreferences = document.forms["editProfileForm"]["dietPreferenceModal"].value;
             var energySource = document.forms["editProfileForm"]["energySourceModal"].value;
+            var reminder = document.forms["editProfileForm"]["reminderModal"].value;
 
             // Email validation regular expression
             var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-            if (username == "" || firstName == "" || lastName == "" || email == "" || contactNumber == "" || commutingMethod == "" || dietPreferences == "" || energySource == "") {
+            if (username == "" || firstName == "" || lastName == "" || email == "" || contactNumber == "" || commutingMethod == "" || dietPreferences == "" || energySource == ""|| reminder == "") {
                   // Display an alert message
                   alert("Please fill in all fields.");
                   return false; // Prevent form submission
