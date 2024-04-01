@@ -450,41 +450,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </style>
 </head>
 <body>
+    <div class="container ">
+        <div class="col-md-12 justify-content-center">
+            
+        </div>
+        <form id="carbonFootprintForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+        <label for="transportation">Transportation (in miles):</label>
+    <input type="number" id="transportation" name="transportation" placeholder="Enter miles">
+    
+    <label for="energy">Energy Consumption (in kWh):</label>
+    <input type="number" id="energy" name="energy" placeholder="Enter kWh">
+    
+    <label for="diet">Diet (in kg of CO2):</label>
+    <input type="number" id="diet" name="diet" placeholder="Enter kg of CO2">
+    
+    <button type="submit" id="calculateButton">Calculate</button>
+    </form>
 
-<form id="carbonFootprintForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-    <label for="transportation">Transportation (in miles):</label>
-  <input type="number" id="transportation" name="transportation" placeholder="Enter miles">
-  
-  <label for="energy">Energy Consumption (in kWh):</label>
-  <input type="number" id="energy" name="energy" placeholder="Enter kWh">
-  
-  <label for="diet">Diet (in kg of CO2):</label>
-  <input type="number" id="diet" name="diet" placeholder="Enter kg of CO2">
-  
-  <button type="submit" id="calculateButton">Calculate</button>
-</form>
+        <!-- Button for opening recomm.php -->
+    <button onclick="openRecomm()">Open Recommendations</button>
 
-<!-- Button for opening recomm.php -->
-<button onclick="openRecomm()">Open Recommendations</button>
+    </div>
 
-<script>
-  // JavaScript function to open recomm.php
-  function openRecomm() {
-    window.open("recommCalculator.php", "_blank");
-  }
-</script>
+    
+    
+    <script>
+    // JavaScript function to open recomm.php
+    function openRecomm() {
+        window.open("recommCalculator.php", "_blank");
+    }
+    </script>
 
-<div id="result">
+    <div id="result">
 
-</div>
+    </div>
 
-<div id="dashboard">
-    <h2>Real-time Carbon Footprint Dashboard</h2>
-    <div id="totalCarbonFootprint"></div>
-    <div id="emissionBreakdown"></div>
-</div>
+    <div id="dashboard">
+        <h2>Real-time Carbon Footprint Dashboard</h2>
+        <div id="totalCarbonFootprint"></div>
+        <div id="emissionBreakdown"></div>
+    </div>
 
-<!-- Content Section End -->
+    <!-- Content Section End -->
+
+    </div>
+
 
         <!-- Footer Section -->
         <footer class="footer-03">
