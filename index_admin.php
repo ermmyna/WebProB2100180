@@ -185,47 +185,6 @@ HTML;
   </div>
 </div>
 
-        <!-- Add your form or content for adding new content here -->
-       
-          <div class="mb-3">
-            <label for="typeOfContent" class="form-label">Type of Content</label>
-            <select class="form-select" id="typeOfContent" name="typeOfContent" required>
-              <option value="Article">Article</option>
-              <option value="Infographic">Infographic</option>
-              <option value="Video">Video</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="categoryOfContent" class="form-label">Category of Content</label>
-            <select class="form-select" id="categoryOfContent" name="categoryOfContent" required>
-              <!-- Populate categories dynamically if needed -->
-              <option value="Category 1">Category 1</option>
-              <option value="Category 2">Category 2</option>
-              <option value="Category 3">Category 3</option>
-            </select>
-          </div>
-          <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-          </div>
-          <div class="mb-3">
-            <label for="description" class="form-label">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <input type="file" class="form-control" id="content" name="content" required>
-          </div>
-          <button type="submit" class="btn btn-primary">Add Content</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
-
-    <!-- Modal content -->
-  </div>
-
   <!-- JavaScript and Bootstrap Bundle -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
