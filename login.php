@@ -67,7 +67,7 @@ function weeklyLogUpToDate($con) {
 </head>
 <body>
     <div class="wrapper home2">
-        <!--Header Start-->
+       <!--Header Start-->
       <header class="header-style-2">
          <nav class="navbar navbar-expand-lg">
                <a class="logo" href="index.html"><img src="images/EcoTrace Logo.png" alt="" style="height: 100px; margin-left:30px;"></a>
@@ -95,9 +95,6 @@ function weeklyLogUpToDate($con) {
                        </li>
                        <li class="nav-item">
                            <a class="nav-link" href="history.php">History</a>
-                       </li>
-                       <li class="nav-item">
-                           <a class="nav-link" href="socialInt(shareAchievement).html">Social</a>
                        </li>
                        <?php endif; ?>
                   </ul>

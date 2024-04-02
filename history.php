@@ -534,8 +534,8 @@ ini_set('display_errors', 1);
                             ?>
                         </select>
                     </div>
-                    <div style="padding-left: 10px;">
-                        <button id="showActivityBtn" class="btn btn-primary">Show Activity</button>
+                    <div style="margin-left: 30px;">
+                        <button id="showActivityBtn" class="btn btn-success px-4">Show Activity</button>
                     </div>
                 </div>
                 <!-- Select Month and Week End -->
@@ -925,85 +925,88 @@ ini_set('display_errors', 1);
 
             </script>
 
+
             <!-- JavaScript to update dashboard cards, doughnut chart and line chart -->
             <script>
                 $(document).ready(function() {
-                // Event listener for the "Show Activity" button click
-                $('#showActivityBtn').click(function() {
-                    var selectedMonth = $('#monthDropdown').val();
-                    var selectedWeek = $('#weekDropdown').val();
+                    // Event listener for the "Show Activity" button click
+                    $('#showActivityBtn').click(function() {
+                        var selectedMonth = $('#monthDropdown').val();
+                        var selectedWeek = $('#weekDropdown').val();
 
-                    // Make an AJAX request to fetch the updated data
-                    $.ajax({
-                        url: "fetch_history.php",
-                        method: "POST",
-                        dataType: "json",
-                        data: { selectedMonth: selectedMonth, selectedWeek: selectedWeek },
-                        success: function(response) {
-                            // Update the dashboard cards
-                            updateDashboardCards(response.dashboardData);
+                        // Make an AJAX request to fetch the updated data
+                        $.ajax({
+                            url: "fetch_history.php",
+                            method: "POST",
+                            dataType: "json",
+                            data: { selectedMonth: selectedMonth, selectedWeek: selectedWeek },
+                            success: function(response) {
+                                if (response.success) {
+                                    // Update the dashboard cards
+                                    updateDashboardCards(response.dashboardData);
 
-                            // Update the doughnut chart
-                            updateDonutChart(response.donutChartData);
+                                    // Update the doughnut chart
+                                    updateDonutChart(response.donutChartData);
 
-                            // Update the line chart
-                            updateLineChart(response.lineChartData);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("AJAX Error: " + status, error);
-                        }
+                                    // Update the line chart
+                                    updateLineChart(response.lineChartData);
+                                } else {
+                                    console.error("Error: " + response.message);
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("AJAX Error: " + status, error);
+                            }
+                        });
                     });
                 });
-            });
 
-            // Function to update the dashboard cards
-            function updateDashboardCards(data) {
-                // Assuming data is an object containing the updated values for dashboard cards
-                // Update the content of dashboard cards with the received data
-                $('.food-card .value').text(data.totalFood);
-                $('.energy-card .value').text(data.totalEnergy);
-                $('.transport-card .value').text(data.totalTransport);
-                $('.overall-card .value').text(data.totalOverall);
-            }
+                // Function to update the dashboard cards
+                function updateDashboardCards(data) {
+                    // Assuming data is an object containing the updated values for dashboard cards
+                    // Update the content of dashboard cards with the received data
+                    $('.food-card .value').text(data.totalFood);
+                    $('.energy-card .value').text(data.totalEnergy);
+                    $('.transport-card .value').text(data.totalTransport);
+                    $('.overall-card .value').text(data.totalOverall);
+                }
 
-            // Function to update the doughnut chart
-            function updateDonutChart(data) {
-                // Assuming data is an array containing the updated values for the doughnut chart
-                // Update the doughnut chart with the received data
-                var chartData = {
-                    labels: ['Transportation', 'Food', 'Energy'],
-                    datasets: [{
-                        data: data,
-                        backgroundColor: ['#FF4F4B', '#4CAF50', '#2196F3']
-                    }]
-                };
+                // Function to update the doughnut chart
+                function updateDonutChart(data) {
+                    // Assuming data is an array containing the updated values for the doughnut chart
+                    // Update the doughnut chart with the received data
+                    var chartData = {
+                        labels: ['Transportation', 'Food', 'Energy'],
+                        datasets: [{
+                            data: data,
+                            backgroundColor: ['#FF4F4B', '#4CAF50', '#2196F3']
+                        }]
+                    };
 
-                // Assuming donutChart is the variable holding the doughnut chart instance
-                donutChart.data = chartData;
-                donutChart.update();
-            }
+                    // Assuming donutChart is the variable holding the doughnut chart instance
+                    donutChart.data = chartData;
+                    donutChart.update();
+                }
 
-            // Function to update the line chart
-            function updateLineChart(data) {
-                // Assuming data is an array containing the updated values for the line chart
-                // Update the line chart with the received data
-                var chartData = {
-                    labels: data.weekLabels,
-                    datasets: [{
-                        label: 'Total Carbon Footprint',
-                        borderColor: '#FFD700',
-                        backgroundColor: 'rgba(255, 215, 0, 0.5)',
-                        pointRadius: 5,
-                        data: data.totalFootprintData
-                    }]
-                };
+                // Function to update the line chart
+                function updateLineChart(data) {
+                    // Assuming data is an object containing the updated values for the line chart
+                    // Update the line chart with the received data
+                    var chartData = {
+                        labels: data.weekLabels,
+                        datasets: [{
+                            label: 'Total Carbon Footprint',
+                            borderColor: '#FFD700',
+                            backgroundColor: 'rgba(255, 215, 0, 0.5)',
+                            pointRadius: 5,
+                            data: data.totalFootprintData
+                        }]
+                    };
 
-                // Assuming lineChart is the variable holding the line chart instance
-                lineChart.data = chartData;
-                lineChart.update();
-            }
-
-            
+                    // Assuming lineChart is the variable holding the line chart instance
+                    lineChart.data = chartData;
+                    lineChart.update();
+                }
 
             </script>
    </body>
